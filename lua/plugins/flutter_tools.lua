@@ -6,6 +6,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "stevearc/dressing.nvim",
+"hrsh7th/cmp-nvim-lsp",
     },
     config = function()
       require("flutter-tools").setup {
