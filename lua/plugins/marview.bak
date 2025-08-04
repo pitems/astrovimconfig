@@ -1,0 +1,23 @@
+return {
+  "OXY2DEV/markview.nvim",
+  dependencies = { "nvim-treesitter/nvim-treesitter" },
+  ft = "markdown",
+  build = ":TSUpdate",
+  config = function()
+    require("markview").setup()
+
+    -- Safe auto-preview on markdown open
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "markdown",
+      callback = function()
+        vim.schedule(function()
+          -- Ensure Markview is loaded (important for lazy loading)
+          require("lazy").load { plugins = { "markview.nvim" } }
+
+          -- Now safely open
+          vim.cmd("MarkviewOpen")
+        end)
+      end,
+    })
+  end,
+}

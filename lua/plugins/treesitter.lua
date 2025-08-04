@@ -1,15 +1,20 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
--- Customize Treesitter
+-- Remove this line if it's still there
+-- if true then return {} end
 
 ---@type LazySpec
 return {
-  "nvim-treesitter/nvim-treesitter",
-  opts = {
-    ensure_installed = {
-      "lua",
-      "vim",
-      -- add more arguments for adding more treesitter parsers
+  {
+    "nvim-treesitter/nvim-treesitter",
+    lazy = false, -- important!
+    dependencies = { "OXY2DEV/markview.nvim" },
+    opts = {
+      ensure_installed = {
+        "lua",
+        "vim",
+        "markdown",
+        "markdown_inline",
+        -- Add more languages if needed
+      },
     },
   },
 }

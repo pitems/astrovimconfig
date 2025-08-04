@@ -1,9 +1,10 @@
 local wk = require("which-key")
 local tabsession = require("user.tabsession")
 
+-- local colorscheme = require("user.colorscheme")
 wk.register({
   ["<leader>D"] = { function() vim.cmd("Dooing") end, "Dooing" },
-  ["<leader>z"] = { function() vim.cmd("ZenMode") end, "ZenMode" },
+  ["<leader>Z"] = { function() vim.cmd("ZenMode") end, "ZenMode" },
 
   ["<leader>F"] = {
     name = "Flutter",
@@ -16,6 +17,8 @@ wk.register({
     r = { "<cmd>FlutterReload<CR>", "Hot Reload App" },
     v = { "<cmd>Telescope flutter fvm<CR>", "Flutter Version" },
     y = { "<cmd>FlutterCopyProfilerUrl<CR>", "Flutter Dev Tools Link" },
+
+    o = { "<cmd>FlutterOutlineToggle<CR>", "Flutter Outline Toggle" },
   },
 
   ["<leader>l"] = {
@@ -35,10 +38,60 @@ wk.register({
   },
 
   ["<leader>T"] = {
-    name = "Tab Sessions",
-    t = { tabsession.load_tab, "Open Tab Session" },
-    n = { tabsession.save_current_tab, "Name & Save Tab Session" },
-    d = { tabsession.delete_current_tab, "Delete Tab Session" },
+    name = "Tab Tools",
+    n = { "<cmd>tabnew<CR>", "New Tab" },
+    c = { "<cmd>tabclose<CR>", "Close Tab" },
+    o = { "<cmd>tabonly<CR>", "Close Other Tabs" },
+    l = { "<cmd>Telescope scope buffers<CR>", "List Tabs" },
+    r = { function()
+      local newname = vim.fn.input("Rename Tab: ")
+      vim.t[vim.api.nvim_get_current_tabpage()].tab_name = newname
+    end, "Rename Tab (requires bufferline)" },
+    m = {
+      function()
+        local tab = tonumber(vim.fn.input("Move buffer to tab #: "))
+        if tab then vim.cmd("ScopeMoveBuf " .. tab) end
+      end,
+      "Move Buffer to Tab",
+},
   },
+
+  ["<leader>s"] = {
+    name = "Spectre",
+    p = {
+      function()
+        require("spectre").open()
+      end,
+      "Search Project (Spectre)",
+    },
+    w = {
+      function()
+        require("spectre").open_visual({ select_word = true })
+      end,
+      "Search Current Word (Project)",
+    },
+    f = {
+        name = "File Search",
+        f = {
+          function()
+            require("spectre").open_file_search()
+          end,
+          "Search in Current File",
+        },
+        w = {
+          function()
+            require("spectre").open_file_search({ select_word = true })
+          end,
+          "Search Word in File",
+        },
+      },
+  },
+
+  ["<tab>"] = { "<cmd>tabnext<CR>", "Next Tab" },
+  ["<s-tab>"] = { "<cmd>tabprevious<CR>", "Previous Tab" },
+  -- ["<leader>u"] = {
+  --   name = "UI / Utilities", -- Add a name to the 'u' group
+  --   T = { function() require("user.colorscheme").pick() end, "Pick Colorscheme" },
+  -- }
 })
 

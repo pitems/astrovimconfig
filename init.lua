@@ -25,3 +25,7 @@ end
 
 require "lazy_setup"
 require "polish"
+
+require("utils.transparent").setup({
+  enabled = true, -- start disabled
+})
