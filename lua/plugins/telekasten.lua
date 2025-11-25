@@ -11,6 +11,11 @@ return {
     { "<leader>zc", "<cmd>Telekasten show_calendar<CR>", desc = "Calendar" },
     { "<leader>zb", "<cmd>Telekasten show_backlinks<CR>", desc = "Backlinks" },
     { "<leader>zt", "<cmd>Telekasten toggle_todo<CR>", desc = "Toggle TODO" },
+ -- use function mappings so lazy.nvim loads telekasten first
+    -- 🔄 Switch vaults
+    { "<leader>vs", "<cmd>Telekasten switch_vault<CR>", desc = "Switch Vault (picker)" },
+    { "<leader>vF", function() require("telekasten").switch_vault("flutter") end, desc = "Switch to Flutter vault" },
+    { "<leader>vR", function() require("telekasten").switch_vault("rust") end, desc = "Switch to Rust vault" },
   },
   opts = function()
     local home = vim.fn.expand("~") .. "/notes"
@@ -25,6 +30,14 @@ return {
       template_new_note = home .. "/templates/new_note.md",
       template_new_daily = home .. "/templates/daily.md",
       template_new_weekly = home .. "/templates/weekly.md",
+      vaults = {
+        flutter = {
+          home = home .. "/programming/flutter",
+        },
+        rust = {
+          home = home .. "~/programming/rust",
+        },
+      },
     }
   end,
 }

@@ -5,7 +5,6 @@ return {
     lazy = false,
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "stevearc/dressing.nvim",
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
@@ -14,7 +13,7 @@ return {
         ui = {
           border = "rounded",
           notification_style = "plugin",
-          device_picker = "dressing", -- fix for picker closing
+          device_picker = "native", -- fix for picker closing
         },
         decorations = {
           statusline = { app_version = true, device = true },
@@ -82,7 +81,18 @@ return {
             require("dap.ext.vscode").load_launchjs()
           end,
         },
-        dev_log = { enabled = false, notify_errors = false },
+         debug = true, -- this is the main flag
+        dev_log = { enabled = false, notify_errors = true},
+  --       dev_log = {
+  --   enabled = true,
+  --   open_cmd = "tabedit", -- optional: open logs in a tab
+  -- },
+         -- optional: force prompt every time
+        flutter_run = {
+             use_launchjson = true,
+    always_show_picker = true,
+          prompt_project_type = true
+        },
         lsp = {
           on_attach = function(client, bufnr)
             vim.api.nvim_buf_set_keymap(bufnr, "n", "gd",
