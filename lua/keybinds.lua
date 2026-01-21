@@ -1,11 +1,12 @@
 local wk = require("which-key")
 local tabsession = require("user.tabsession")
-
+local documentator = require("utils.documentation_creator")
 -- local colorscheme = require("user.colorscheme")
 wk.register({
-  ["<leader>D"] = { function() vim.cmd("Dooing") end, "Dooing" },
+  -- ["<leader>D"] = { function() vim.cmd("Dooing") end, "Dooing" },
   ["<leader>Z"] = { function() vim.cmd("ZenMode") end, "ZenMode" },
 
+  ["<leader>D"] = { function() documentator.open_or_create_doc() end, "Open/Create documentation for file" },
   ["<leader>F"] = {
     name = "Flutter",
     R = { "<cmd>FlutterRestart<CR>", "Hot Restart App" },
