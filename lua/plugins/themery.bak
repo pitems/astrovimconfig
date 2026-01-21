@@ -1,0 +1,52 @@
+return {
+  "zaldih/themery.nvim",
+  dependencies = { "nvim-telescope/telescope.nvim" },
+  cmd = { "Themery" },
+opts = {
+  themes = {
+    { name = "AstroDark", colorscheme = "astrodark" },
+    { name = "CyberDream", colorscheme = "cyberdream" },
+    { name = "Tokyo Night", colorscheme = "tokyonight" },
+    { name = "Kanagawa", colorscheme = "kanagawa" },
+    { name = "Rose Pine", colorscheme = "rose-pine" },
+    { name = "Gruvbox", colorscheme = "gruvbox" },
+    { name = "Terafox", colorscheme = "terafox" },
+
+    { name = "Catppuccin", colorscheme = "catppuccin" },
+    { name = "Catppuccin Latte", colorscheme = "catppuccin-latte" },
+
+    -- Zenbones family
+    { name = "Zenbones", colorscheme = "zenbones" },
+    { name = "Neobones", colorscheme = "neobones" },
+    { name = "Forestbones", colorscheme = "forestbones" },
+    { name = "Rosebones", colorscheme = "rosebones" },
+    { name = "Nordbones", colorscheme = "nordbones" },
+    { name = "Tokyobones", colorscheme = "tokyobones" },
+    { name = "Kanagawabones", colorscheme = "kanagawabones" },
+    { name = "Zenwritten", colorscheme = "zenwritten" },
+  },
+  livePreview = false, -- 👈 IMPORTANT
+    applyThemeOnSelect = true,
+  -- themeConfigFile = vim.fn.stdpath("config") .. "/lua/user/theme.lua",
+    --   -- 🔥 Executed BEFORE every theme
+    globalBefore = [[
+      vim.cmd("highlight clear")
+      if vim.fn.exists("syntax_on") == 1 then
+        vim.cmd("syntax reset")
+      end
+    ]],
+
+    -- 🔥 Executed AFTER every theme
+    globalAfter = [[
+      local cs = vim.g.colors_name or ""
+
+      local light = {
+        ["catppuccin-latte"] = true,
+        ["zenwritten"] = true,
+        ["forestbones"] = true,
+      }
+
+      vim.o.background = light[cs] and "light" or "dark"
+    ]],
+  },
+}

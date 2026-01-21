@@ -7,27 +7,46 @@ return {
       "nvim-lua/plenary.nvim",
       "hrsh7th/cmp-nvim-lsp",
     },
+
     config = function()
-      require("flutter-tools").setup {
+      local flutter_tools = require("flutter-tools")
+
+      flutter_tools.setup({
         fvm = true,
+
         ui = {
           border = "rounded",
-          notification_style = "plugin",
-          device_picker = "native", -- fix for picker closing
+          notification_style = "native",  -- recommended value in new version
         },
+
         decorations = {
-          statusline = { app_version = true, device = true },
+          statusline = {
+            app_version = true,
+            device = true,
+            project_config = false,
+          },
         },
-        outline = { open_cmd = "30vnew", auto_open = false },
+
+        outline = {
+          open_cmd = "30vnew",
+          auto_open = false,
+        },
+
+        dev_log = {
+          enabled = false,
+          notify_errors = true,
+        },
+
         debugger = {
           enabled = true,
           run_via_dap = true,
           exception_breakpoints = {},
-          register_configurations = function(_)
+          register_configurations = function(paths)
             local dap = require("dap")
             local dapui = require("dapui")
 
             dap.set_log_level("TRACE")
+
             dap.defaults.flutter.exception_breakpoints = {
               { filter = "uncaught", action = "ignore" },
             }
@@ -55,17 +74,11 @@ return {
                 {
                   elements = {
                     { id = "repl", size = 1.0 },
-                    { id = "console", size = 0.0 },
                   },
                   size = 20,
                   position = "bottom",
                 },
               },
-              floating = {
-                border = "single",
-                mappings = { close = { "q", "<Esc>" } },
-              },
-              windows = { indent = 1 },
             })
 
             dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -81,25 +94,26 @@ return {
             require("dap.ext.vscode").load_launchjs()
           end,
         },
-         debug = true, -- this is the main flag
-        dev_log = { enabled = false, notify_errors = true},
-  --       dev_log = {
-  --   enabled = true,
-  --   open_cmd = "tabedit", -- optional: open logs in a tab
-  -- },
-         -- optional: force prompt every time
+
         flutter_run = {
-             use_launchjson = true,
-    always_show_picker = true,
-          prompt_project_type = true
+          use_launchjson = true,
+          prompt_project_type = true,
         },
+
         lsp = {
           on_attach = function(client, bufnr)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "gd",
-              "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
+            vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = bufnr })
           end,
-          capabilities = require("cmp_nvim_lsp").default_capabilities(),
-          color = { enabled = true, virtual_text = true, virtual_text_str = "■" },
+
+          -- ❗ DO NOT override capabilities manually
+          -- The internal merge in new flutter-tools is correct.
+
+          color = {
+            enabled = true,
+            virtual_text = true,
+            virtual_text_str = "■",
+          },
+
           settings = {
             lineLength = 120,
             showTodos = true,
@@ -110,9 +124,10 @@ return {
             updateImportsOnRename = true,
           },
         },
-      }
+      })
     end,
   },
+
   {
     "wa11breaker/flutter-bloc.nvim",
     ft = { "dart" },

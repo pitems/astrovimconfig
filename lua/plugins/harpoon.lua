@@ -6,20 +6,17 @@ return {
     local harpoon = require("harpoon")
     local wk = require("which-key")
 
-    -- Setup harpoon
-    harpoon.setup()
+    harpoon:setup()
 
-    -- Register keybinds with which-key
-    wk.register({
-      H = {
-        name = "Harpoon",
-        a = { function() require("harpoon.mark").add_file() end, "Add File to Harpoon" },
-        d = { function() require("harpoon.mark").rm_file() end, "Remove File from Harpoon" },
-        c = { function() require("harpoon.ui").clear() end, "Clear all items on Harpoon" },
-        m = { function() require("harpoon.ui").toggle_quick_menu() end, "Toggle Quick Menu" },
-        p = { function() require("harpoon.ui").nav_prev() end, "Navigate to Previous File" },
-        n = { function() require("harpoon.ui").nav_next() end, "Navigate to Next File" },
-      }
-    }, { prefix = "<leader>" })
+    wk.add({
+      { "<leader>Ha", function() harpoon:list():add() end, desc = "Add file to Harpoon" },
+      { "<leader>Hd", function() harpoon:list():remove() end, desc = "Remove file from Harpoon" },
+      { "<leader>Hc", function() harpoon:list():clear() end, desc = "Clear Harpoon list" },
+      { "<leader>Hm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, desc = "Toggle Harpoon Menu" },
+
+      -- Navigation like your original
+      { "<leader>Hp", function() harpoon:list():prev() end, desc = "Harpoon previous" },
+      { "<leader>Hn", function() harpoon:list():next() end, desc = "Harpoon next" },
+    })
   end,
 }

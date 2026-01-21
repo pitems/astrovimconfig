@@ -11,8 +11,10 @@ return {
 
     -- Load all snippets from friendly-snippets except for Dart
     require("luasnip.loaders.from_vscode").lazy_load({
-      exclude = { "dart" }, -- Exclude Dart snippets to avoid duplication
+      -- exclude = { "dart" }, -- Exclude Dart snippets to avoid duplication
     })
+
+     luasnip.filetype_extend("dart", { "flutter" })
 
     -- Optional: Debug loaded snippets to confirm Dart is excluded
     print(vim.inspect(luasnip.snippets))
