@@ -1,0 +1,2 @@
+void day(){}
+void salo(){}
