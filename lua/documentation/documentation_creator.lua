@@ -1,5 +1,5 @@
-local parsers = require("utils.doc_parsers")
-local utils  = require('utils.documents_utils')
+local parsers = require("documentation.doc_parsers.init")
+local utils  = require('documentation.documents_utils')
 local M = {}
 
 function M.open_or_create_doc()
