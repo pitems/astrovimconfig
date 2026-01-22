@@ -1,7 +1,7 @@
 local M = {}
 
 local parsers = {
-  dart = require("utils.doc_parsers.dart"),
+  dart = require("documentation.doc_parsers.dart"),
   -- lua = require("utils.doc_parsers.lua"), -- later
 }
 

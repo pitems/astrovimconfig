@@ -1,32 +1,5 @@
 local M = {}
 
-local function levenshtein(a, b)
-  if a == b then return 0 end
-  if #a == 0 then return #b end
-  if #b == 0 then return #a end
-
-  local matrix = {}
-
-  for i = 0, #a do
-    matrix[i] = {[0] = i}
-  end
-  for j = 0, #b do
-    matrix[0][j] = j
-  end
-
-  for i = 1, #a do
-    for j = 1, #b do
-      local cost = a:sub(i,i) == b:sub(j,j) and 0 or 1
-      matrix[i][j] = math.min(
-        matrix[i-1][j] + 1,
-        matrix[i][j-1] + 1,
-        matrix[i-1][j-1] + cost
-      )
-    end
-  end
-
-  return matrix[#a][#b]
-end
 
 local function extract_fn_name(line)
   return line:match("^### .+ (%w+)%(")
@@ -81,41 +54,6 @@ function M.find_removed_functions(documented, current_functions)
   return removed
 end
 
-function M.detect_renames(removed, new)
-  local renamed = {}
-  local used_new = {}
-  local used_removed = {}
-
-  for i, old in ipairs(removed) do
-    local best, best_idx, best_score
-
-    for j, fn in ipairs(new) do
-      if not used_new[j]
-        and fn.return_type == old.return_type then
-
-        local d = levenshtein(old.name, fn.name)
-        local score = 1 - (d / math.max(#old.name, #fn.name))
-
-        if score > 0.5 and (not best or score > best_score) then
-          best = fn
-          best_idx = j
-          best_score = score
-        end
-      end
-    end
-
-    if best then
-      used_new[best_idx] = true
-      used_removed[i] = true
-      table.insert(renamed, {
-        from = old.name,
-        to = best.name,
-      })
-    end
-  end
-
-  return renamed, used_removed, used_new
-end
 
 function M.mark_deprecated_inline(lines, removed, renamed)
   local removed_map = {}
@@ -166,38 +104,44 @@ function M.apply_renames_inline(lines, renamed)
 end
 
 
-function M.compute_diff(documented, current)
-  local new = M.find_new_functions(current, documented)
-  local removed = M.find_removed_functions(documented, current)
+function M.compute_diff(documented, current, renames)
+  local valid_renames = {}
+  local renamed_from = {}
+  local renamed_to = {}
 
-  local renamed, used_removed, used_new =
-    M.detect_renames(removed, new)
-
-  local final_new = {}
-  for i, fn in ipairs(new) do
-    if not used_new[i] then
-      table.insert(final_new, fn)
+  for _, r in ipairs(renames or {}) do
+    if documented[r.from] then
+      table.insert(valid_renames, r)
+      renamed_from[r.from] = true
+      renamed_to[r.to] = true
     end
   end
 
-  local final_removed = {}
-  for i, name in ipairs(removed) do
-    if not used_removed[i] then
-      table.insert(final_removed, name)
+  local new = {}
+  for _, fn in ipairs(current) do
+    if not documented[fn.name] and not renamed_to[fn.name] then
+      table.insert(new, fn)
     end
   end
 
-  vim.notify(vim.inspect({
-  new = new,
-  removed = removed,
-  renamed = renamed,
-}))
-
+  local removed = {}
+  for name, meta in pairs(documented) do
+    if
+      not meta.deprecated
+      and not renamed_from[name]
+      and not vim.tbl_contains(
+        vim.tbl_map(function(f) return f.name end, current),
+        name
+      )
+    then
+      table.insert(removed, { name = name })
+    end
+  end
 
   return {
-    new = final_new,
-    removed = final_removed,
-    renamed = renamed,
+    new = new,
+    removed = removed,
+    renamed = valid_renames,
   }
 end
 

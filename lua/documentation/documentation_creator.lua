@@ -30,10 +30,19 @@ function M.open_or_create_doc()
 
     local documented = utils.extract_documented_functions(md_lines)
     local functions = parser.extract_functions(source_lines)
-    local diff = utils.compute_diff(documented,functions)
-    if #diff.new == 0 and #diff.removed == 0 then
+
+    local rename = require("documentation.rename")
+
+    local renames = rename.detect_renames(source_path)
+    
+
+    local diff = utils.compute_diff(documented,functions,renames)
+    if #diff.new == 0 and #diff.removed == 0 and #diff.renamed == 0 then
       return
     end
+    
+
+
     local preview = {}
 
     if #diff.new > 0 then
@@ -45,7 +54,6 @@ function M.open_or_create_doc()
         table.insert(preview, "  • " .. fn.name)
       end
     end
-
     if #diff.renamed > 0 then
       table.insert(preview, "🔁 Renamed functions:")
       for _, r in ipairs(diff.renamed) do
@@ -63,18 +71,11 @@ function M.open_or_create_doc()
     if #preview == 0 then
       return
     end
-
-    vim.ui.select(
-      { "Apply Changes", "Cancel" },
-      {
-        prompt = "Documentation changes detected\n\n" .. table.concat(preview, "\n"),
-      },
-      function(choice)
-        if choice ~= "Apply Changes" then return end
-
+    
+    local modalpreview = require('documentation.ui.changes_preview')
+    modalpreview.open(diff,function()
         -- Work on md_lines ONLY
         local updated = vim.deepcopy(md_lines)
-        vim.notify(vim.inspect(diff.renamed))
         -- 1️⃣ Add new functions
         if #diff.new > 0 then
           local blocks = parser.render_function_blocks(diff.new)
