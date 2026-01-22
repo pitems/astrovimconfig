@@ -1,6 +1,6 @@
 local wk = require("which-key")
 local tabsession = require("user.tabsession")
-local documentator = require("utils.documentation_creator")
+local documentator = require("documentation.documentation_creator")
 -- local colorscheme = require("user.colorscheme")
 wk.register({
   -- ["<leader>D"] = { function() vim.cmd("Dooing") end, "Dooing" },

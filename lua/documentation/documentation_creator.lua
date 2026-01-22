@@ -55,8 +55,8 @@ function M.open_or_create_doc()
 
     if #diff.removed > 0 then
       table.insert(preview, "⚠️ Deprecated functions:")
-      for _, name in ipairs(diff.removed) do
-        table.insert(preview, "  • " .. name)
+      for _, fn in ipairs(diff.removed) do
+        table.insert(preview, "  • " .. fn.name)
       end
     end
 
@@ -74,7 +74,7 @@ function M.open_or_create_doc()
 
         -- Work on md_lines ONLY
         local updated = vim.deepcopy(md_lines)
-        vim.notify(vim.inspect(diff.new))
+        vim.notify(vim.inspect(diff.renamed))
         -- 1️⃣ Add new functions
         if #diff.new > 0 then
           local blocks = parser.render_function_blocks(diff.new)

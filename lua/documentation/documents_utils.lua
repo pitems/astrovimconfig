@@ -36,9 +36,12 @@ function M.extract_documented_functions(md_lines)
   local documented = {}
 
   for _, line in ipairs(md_lines) do
-    local name = extract_fn_name(line)
+    local return_type, name =
+      line:match("^###%s+(.-)%s+(%w+)%(")
+
     if name then
       documented[name] = {
+        return_type = return_type,
         deprecated = line:find("Deprecated") ~= nil,
       }
     end
@@ -65,49 +68,59 @@ function M.find_removed_functions(documented, current_functions)
     current[fn.name] = true
   end
 
-  local out = {}
+  local removed = {}
   for name, meta in pairs(documented) do
     if not current[name] and not meta.deprecated then
-      table.insert(out, name)
+      table.insert(removed, {
+        name = name,
+        return_type = meta.return_type,
+      })
     end
   end
 
-  return out
+  return removed
 end
 
 function M.detect_renames(removed, new)
   local renamed = {}
   local used_new = {}
+  local used_removed = {}
 
-  for _, old in ipairs(removed) do
-    local best, best_score
+  for i, old in ipairs(removed) do
+    local best, best_idx, best_score
 
     for j, fn in ipairs(new) do
-      if not used_new[j] then
-        local d = levenshtein(old, fn.name)
-        local score = 1 - (d / math.max(#old, #fn.name))
+      if not used_new[j]
+        and fn.return_type == old.return_type then
 
-        if score > 0.6 and (not best or score > best_score) then
-          best = { from = old, to = fn.name }
+        local d = levenshtein(old.name, fn.name)
+        local score = 1 - (d / math.max(#old.name, #fn.name))
+
+        if score > 0.5 and (not best or score > best_score) then
+          best = fn
+          best_idx = j
           best_score = score
-          best.idx = j
         end
       end
     end
 
     if best then
-      used_new[best.idx] = true
-      table.insert(renamed, { from = best.from, to = best.to })
+      used_new[best_idx] = true
+      used_removed[i] = true
+      table.insert(renamed, {
+        from = old.name,
+        to = best.name,
+      })
     end
   end
 
-  return renamed
+  return renamed, used_removed, used_new
 end
 
 function M.mark_deprecated_inline(lines, removed, renamed)
   local removed_map = {}
-  for _, name in ipairs(removed) do
-    removed_map[name] = true
+  for _, fn in ipairs(removed) do
+    removed_map[fn.name] = true
   end
 
   local renamed_from = {}
@@ -156,30 +169,30 @@ end
 function M.compute_diff(documented, current)
   local new = M.find_new_functions(current, documented)
   local removed = M.find_removed_functions(documented, current)
-  local renamed = M.detect_renames(removed, new)
 
-  -- filter new/removed to exclude renames
-  local renamed_from = {}
-  local renamed_to = {}
-
-  for _, r in ipairs(renamed) do
-    renamed_from[r.from] = true
-    renamed_to[r.to] = true
-  end
+  local renamed, used_removed, used_new =
+    M.detect_renames(removed, new)
 
   local final_new = {}
-  for _, fn in ipairs(new) do
-    if not renamed_to[fn.name] then
+  for i, fn in ipairs(new) do
+    if not used_new[i] then
       table.insert(final_new, fn)
     end
   end
 
   local final_removed = {}
-  for _, name in ipairs(removed) do
-    if not renamed_from[name] then
+  for i, name in ipairs(removed) do
+    if not used_removed[i] then
       table.insert(final_removed, name)
     end
   end
+
+  vim.notify(vim.inspect({
+  new = new,
+  removed = removed,
+  renamed = renamed,
+}))
+
 
   return {
     new = final_new,
