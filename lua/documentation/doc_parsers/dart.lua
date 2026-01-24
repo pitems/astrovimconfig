@@ -1,5 +1,6 @@
 local function_finder = require("documentation.finders.function_finder")
 local variable_finder = require('documentation.finders.variable_finder')
+local dependency_finder = require('documentation.finders.dependency_finder')
 local M = {}
 local METHOD_REGEX =
   "^%s*(?:[A-Za-z_<>,]+|void)%s+([A-Za-z_]\\w*)%s*%([^)]*%)%s*{?"
@@ -85,6 +86,7 @@ function M.parse(source_lines)
 
   local functions = function_finder.find(buf, M.parse_with_regex)
   local variables = variable_finder.find(buf, M.parse_with_regex)
+  local dependencies = dependency_finder.find(buf)
 --   vim.notify(
 --   "Variables:\n" .. vim.inspect(variables),
 --   vim.log.levels.INFO,
@@ -95,6 +97,7 @@ function M.parse(source_lines)
   return {
     functions = functions,
     variables = variables,
+    dependencies = dependencies
   }
 end
 

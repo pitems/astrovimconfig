@@ -14,6 +14,12 @@ M.sections = {
     icon = "➕",
     renderer = "render_functions",
   },
+  {
+  key = "dependencies",
+  title = "Dependencies",
+  icon = "🔗",
+  renderer = "render_dependencies",
+  },
 }
 
 return M

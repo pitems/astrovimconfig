@@ -50,7 +50,9 @@ local function render_variables(vars)
   -- render
   for _, t in ipairs(ordered_types) do
     table.insert(md, "")
-    table.insert(md, "### " .. t)
+    -- capitalize first letter for uniformity
+    local header_type = t:gsub("^%l", string.upper)
+    table.insert(md, "### " .. header_type)
     table.insert(md, "")
 
     for _, v in ipairs(groups[t]) do
@@ -74,10 +76,22 @@ local function render_variables(vars)
 end
 
 
+-- ---- dependency renderer --------------------------------
+local function render_dependencies(deps)
+  local md = {}
+
+  for _, d in ipairs(deps) do
+    table.insert(md, "- `" .. d.path .. "`")
+  end
+
+  return md
+end
+
 -- ---- renderer list ---------------------------------------
 local renderers = {
   render_functions = render_functions,
   render_variables = render_variables,
+  render_dependencies = render_dependencies,
 }
 
 -- ---- public API -------------------------------------------
