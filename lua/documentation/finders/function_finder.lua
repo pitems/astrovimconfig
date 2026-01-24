@@ -27,7 +27,7 @@ local FUNCTION_REGEXES = {
 
 function M.find(bufnr, parse_with_regex)
   local results = {}
-  local DEBUG = true
+  local DEBUG = false
 
   for _, regex in ipairs(FUNCTION_REGEXES) do
     local raw = parse_with_regex(bufnr, regex, { want = "class" }) or {}

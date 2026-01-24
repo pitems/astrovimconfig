@@ -90,7 +90,7 @@ function M.build(rel_path, parsed)
     "",
   }
 
-  for _, section in pairs(headers.sections) do
+  for _, section in ipairs(headers.sections) do
     local items = parsed[section.key]
 
     if items and #items > 0 then
@@ -117,7 +117,7 @@ end
 
 -- used when *updating* docs (adding only new blocks)
 function M.render_section(section_key, items)
-  for _, section in pairs(headers.sections) do
+  for _, section in ipairs(headers.sections) do
     if section.key == section_key then
       local renderer = renderers[section.renderer]
       return renderer and renderer(items) or {}

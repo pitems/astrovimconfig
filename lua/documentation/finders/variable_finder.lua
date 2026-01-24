@@ -26,7 +26,7 @@ local VARIABLE_REGEXES = {
 
 function M.find(bufnr, parse_with_regex)
   local vars = {}
-  local DEBUG = true -- toggle this
+  local DEBUG = false -- toggle this
 
   for _, regex in ipairs(VARIABLE_REGEXES) do
     local raw = parse_with_regex(bufnr, regex, { want = "class" }) or {}
