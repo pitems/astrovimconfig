@@ -1,2 +1,5 @@
+int baba = 0;
+String boba = 'blublu';
 void day(){}
-void salo(){}
+void salo3(){}
+

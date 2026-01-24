@@ -1,7 +1,6 @@
 void something() {}
 void test2() {}
-Future<void> andreFN() async {
+Future<void> ploofFN() async {
   return null;
 }
-void oldg(){}
-void asd(){}
+void dad(){}
