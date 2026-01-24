@@ -7,6 +7,12 @@ M.sections = {
     icon = "➕",
     renderer = "render_functions", -- name only, no function ref
   },
+  variables = {
+    key = "variables",
+    title = "Variables",
+    icon = "📦",
+    renderer = "render_variables",
+  },
 }
 
 return M
