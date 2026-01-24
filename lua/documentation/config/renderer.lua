@@ -6,10 +6,10 @@ local M = {}
 
 local function render_functions(functions)
   local md = {}
-
   for _, fn in ipairs(functions) do
+    local return_type = fn.return_type or ""
     table.insert(md, "")
-    table.insert(md, "### " .. fn.return_type .. " " .. fn.name .. "()")
+    table.insert(md, "### " .. return_type .. " " .. fn.name .. "()")
     table.insert(md, "")
     table.insert(md, "_TODO: describe behavior_")
   end
