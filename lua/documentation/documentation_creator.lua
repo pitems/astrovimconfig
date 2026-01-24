@@ -1,5 +1,7 @@
 local parsers = require("documentation.doc_parsers.init")
 local utils  = require('documentation.documents_utils')
+local renderer = require('documentation.config.renderer')
+local preview_renderer = require('documentation.preview_renderer')
 local M = {}
 
 function M.open_or_create_doc()
@@ -29,7 +31,8 @@ function M.open_or_create_doc()
       vim.api.nvim_buf_get_lines(0, 0, -1, false)
 
     local documented = utils.extract_documented_functions(md_lines)
-    local functions = parser.extract_functions(source_lines)
+    local parsed = parser.parse(source_lines)
+    local functions = parsed.functions
 
     local rename = require("documentation.rename")
 
@@ -41,44 +44,13 @@ function M.open_or_create_doc()
       return
     end
     
-
-
-    local preview = {}
-
-    if #diff.new > 0 then
-      for _, fn in ipairs(diff.new) do
-        assert(fn.name, "diff.new contains invalid entries")
-      end
-      table.insert(preview, "➕ New functions:")
-      for _, fn in ipairs(diff.new) do
-        table.insert(preview, "  • " .. fn.name)
-      end
-    end
-    if #diff.renamed > 0 then
-      table.insert(preview, "🔁 Renamed functions:")
-      for _, r in ipairs(diff.renamed) do
-        table.insert(preview, "  • " .. r.from .. " → " .. r.to)
-      end
-    end
-
-    if #diff.removed > 0 then
-      table.insert(preview, "⚠️ Deprecated functions:")
-      for _, fn in ipairs(diff.removed) do
-        table.insert(preview, "  • " .. fn.name)
-      end
-    end
-
-    if #preview == 0 then
-      return
-    end
-    
     local modalpreview = require('documentation.ui.changes_preview')
     modalpreview.open(diff,function()
         -- Work on md_lines ONLY
         local updated = vim.deepcopy(md_lines)
         -- 1️⃣ Add new functions
         if #diff.new > 0 then
-          local blocks = parser.render_function_blocks(diff.new)
+          local blocks = renderer.render_section('functions',diff.new)
           for _, line in ipairs(blocks) do
             table.insert(updated, line)
           end
@@ -110,8 +82,8 @@ function M.open_or_create_doc()
       local md_lines
 
       if parser then
-        local functions = parser.extract_functions(source_lines)
-        md_lines = parser.render_md(rel, functions)
+        local functions = parser.parse(source_lines)
+        md_lines = renderer.build(rel, functions)
       else
         md_lines = {
           "# Documentation: " .. rel,
