@@ -35,7 +35,7 @@ local VARIABLE_REGEXES = {
 
 function M.find(bufnr, parse_with_regex)
   local vars = {}
-  local DEBUG = true -- toggle this
+  local DEBUG = false -- toggle this
 
   -- Read each line once
   for line_num = 1, vim.api.nvim_buf_line_count(bufnr) do

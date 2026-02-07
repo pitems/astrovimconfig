@@ -56,4 +56,33 @@ function M.find(bufnr)
   return deps
 end
 
+-- Example: current MD lines from buffer
+-- md_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+function M.list_dependencies_from_md(md_lines)
+  local deps = {}
+  local in_section = false
+
+  for _, line in ipairs(md_lines) do
+    -- detect start of dependencies section
+    if line:match("^## 🔗 Dependencies") then
+      in_section = true
+    elseif in_section then
+      -- stop if we reach another section
+      if line:match("^## ") then
+        break
+      end
+
+      -- match list items
+      local dep = line:match("^%s*%- `%s*(.+)%s*`")
+      if dep then
+        table.insert(deps, { name = dep, path = dep }) -- path can be resolved later
+      end
+    end
+  end
+
+  return deps
+end
+
+
 return M

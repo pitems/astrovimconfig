@@ -6,7 +6,32 @@ wk.register({
   -- ["<leader>D"] = { function() vim.cmd("Dooing") end, "Dooing" },
   ["<leader>Z"] = { function() vim.cmd("ZenMode") end, "ZenMode" },
 
-  ["<leader>D"] = { function() documentator.open_or_create_doc() end, "Open/Create documentation for file" },
+  -- your keybinds table
+  ["<leader>D"] = {
+    name = "Documentation",
+    d = { function() documentator.open_or_create_doc() end, "Open/Create documentation for file" },
+    a= { function()
+      -- only run if current buffer is a markdown file
+      local ft = vim.bo.filetype  -- new preferred way
+      if ft ~= "markdown" then
+        vim.notify("Not a markdown file!", vim.log.levels.WARN)
+        return
+      end
+
+      -- require the module and call the function
+      local picker = require("documentation.ui.dependency_picker")
+      -- You will need to pass the dependencies array you want to show
+      -- Example: read dependencies from the current md buffer
+      local finder = require("documentation.finders.dependency_finder")
+
+      -- get current buffer lines
+      local md_lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+
+      -- list dependencies
+      local dependencies = finder.list_dependencies_from_md(md_lines)
+      picker.show_dependencies(dependencies)
+    end, "Open Dependencies for current doc" },
+  },
   ["<leader>F"] = {
     name = "Flutter",
     R = { "<cmd>FlutterRestart<CR>", "Hot Restart App" },
