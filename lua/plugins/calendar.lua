@@ -1,5 +1,5 @@
 return {
-  "renerocksai/calendar-vim",
+  "mattn/calendar-vim",
   lazy = true,
-  cmd = { "Calendar", "Telekasten show_calendar" },
+  cmd = { "Calendar", "CalendarVR" },
 }
