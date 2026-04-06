@@ -24,7 +24,16 @@ if not pcall(require, "lazy") then
 end
 require "lazy_setup"
 require "polish"
-
-require("utils.transparent").setup({
+require "user.swap_cleaner"
+require("utils.transparent").setup {
   enabled = true, -- start disabled
-})
+}
+--- Config for session manager groups
+require("resession").setup {
+  autosave = { enabled = false },
+  dirs = {
+    project = function() return vim.fn.getcwd() .. "/.nvim/sessions" end,
+  },
+}
+
+require("core.buffer_groups").setup()
