@@ -16,37 +16,51 @@ function M.create_group()
       vim.notify("Group already exists", vim.log.levels.WARN)
       return
     end
-    local is_first = vim.tbl_isempty(state.groups)
 
+    -- 💾 save current BEFORE doing anything
+    if state.active_group then groups.save_session(state.active_group) end
+
+    -- register
     state.groups[name] = true
 
-    -- groups.ensure_real_buffer()
+    local is_first = not state.active_group
+
     if is_first then
+      -- 🧠 first group = clone current workspace
       groups.save_session(name)
-    else
+      switch.switch(name)
+      return
+    end
+
+    -- 🔥 IMPORTANT: create empty session WITHOUT touching current workspace
+    groups.save_session(name)
+
+    -- 🔄 switch FIRST
+    switch.switch(name)
+
+    -- 🧼 NOW we are inside new group → safe to clean
+    vim.schedule(function()
       vim.cmd "only"
 
       for _, buf in ipairs(vim.api.nvim_list_bufs()) do
         if vim.api.nvim_buf_is_loaded(buf) then
-          local name = vim.api.nvim_buf_get_name(buf)
-          if name ~= "" then pcall(vim.api.nvim_buf_delete, buf, { force = true }) end
+          local bufname = vim.api.nvim_buf_get_name(buf)
+          if bufname ~= "" then pcall(vim.api.nvim_buf_delete, buf, { force = true }) end
         end
       end
 
       vim.cmd "enew"
-      groups.save_session(name)
-    end
-    -- local path = vim.fn.getcwd() .. "/.nvim/sessions/" .. session .. ".vim"
-    -- vim.notify("CHECK FILE: " .. path)
 
-    switch.switch(name)
+      -- 💾 save empty state
+      groups.save_session(name)
+    end)
   end)
 end
 
--- 🔄 SWITCH GROUP (UI)
-function M.switch_group_ui()
-  local switch = require "core.buffer_groups.switch"
+-- 🎛 MENU
+function M.open_picker()
   local state = require "core.buffer_groups.state"
+  local switch = require "core.buffer_groups.switch"
   local resession = require "resession"
 
   local pickers = require "telescope.pickers"
@@ -56,11 +70,15 @@ function M.switch_group_ui()
   local conf = require("telescope.config").values
   local themes = require "telescope.themes"
 
-  -- 🔥 get sessions from resession
+  local in_group = state.active_group ~= nil
+
   local sessions = resession.list { dir = "project" }
 
-  local results = {}
+  local entries = {}
 
+  -- 🟡 NOT in group mode
+
+  -- 🔵 existing groups
   for _, name in ipairs(sessions) do
     if name:match "^bg_" then
       local clean = name:gsub("^bg_", "")
@@ -68,12 +86,40 @@ function M.switch_group_ui()
       local is_active = clean == state.active_group
       local icon = is_active and "● " or "󰆍 "
 
-      table.insert(results, {
+      table.insert(entries, {
         display = icon .. clean,
         value = clean,
-        ordinal = clean,
+        ordinal = "1_" .. clean,
       })
     end
+  end
+
+  -- 🟢 always available
+  table.insert(entries, {
+    display = "➕ Create Group",
+    value = "__create__",
+    ordinal = "2_create",
+  })
+
+  -- 🔴 only in group mode
+  if in_group then
+    table.insert(entries, {
+      display = "✏ Rename Current Group",
+      value = "__rename__",
+      ordinal = "3_rename",
+    })
+
+    table.insert(entries, {
+      display = "🗑 Delete Current Group",
+      value = "__delete__",
+      ordinal = "4_delete",
+    })
+
+    table.insert(entries, {
+      display = "⏻ Exit Group Mode",
+      value = "__exit__",
+      ordinal = "5_exit",
+    })
   end
 
   pickers
@@ -83,14 +129,14 @@ function M.switch_group_ui()
         winblend = 10,
         layout_config = {
           width = 0.35,
-          height = 0.25,
+          height = 0.3,
         },
       },
       {
         prompt_title = "Buffer Groups",
 
         finder = finders.new_table {
-          results = results,
+          results = entries,
           entry_maker = function(entry)
             return {
               value = entry.value,
@@ -107,7 +153,25 @@ function M.switch_group_ui()
             local selection = action_state.get_selected_entry()
             actions.close(bufnr)
 
-            if selection then switch.switch(selection.value) end
+            if not selection then return end
+
+            local value = selection.value
+
+            if value == "__create__" then
+              M.create_group()
+            elseif value == "__rename__" then
+              M.rename_current()
+            elseif value == "__delete__" then
+              M.close_current()
+            elseif value == "__exit__" then
+              M.exit_all()
+            elseif value == "__start__" then
+              -- do nothing (UX only)
+              return
+            else
+              -- 🔥 real group
+              switch.switch(value)
+            end
           end)
 
           return true
@@ -225,35 +289,6 @@ function M.rename_current()
     state.active_group = new_name
 
     vim.notify("Renamed group: " .. old_name .. " → " .. new_name)
-  end)
-end
-
--- 🎛 MENU
-function M.open_menu()
-  local options = {
-    "Create Group",
-    "Switch Group",
-    "Rename Current Group",
-    "Close Current Group",
-    "Exit Group Mode",
-  }
-
-  vim.ui.select(options, {
-    prompt = "Buffer Groups",
-  }, function(choice)
-    if not choice then return end
-
-    if choice == "Create Group" then
-      M.create_group()
-    elseif choice == "Switch Group" then
-      M.switch_group_ui()
-    elseif choice == "Close Current Group" then
-      M.close_current()
-    elseif choice == "Rename Current Group" then
-      M.rename_current()
-    elseif choice == "Exit Group Mode" then
-      M.exit_all()
-    end
   end)
 end
 

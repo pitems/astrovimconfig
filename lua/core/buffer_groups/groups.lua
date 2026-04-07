@@ -2,6 +2,8 @@ local M = {}
 
 local session_dir = "project"
 
+local debug = false
+
 function M.ensure_session_dir()
   if vim.fn.isdirectory(session_dir) == 0 then vim.fn.mkdir(session_dir, "p") end
 end
@@ -39,13 +41,45 @@ function M.save_session(group_name)
   end
 
   -- vim.notify("SAVE OK: " .. session)
+  if debug == true then
+    vim.schedule(function()
+      vim.notify "Sessions list:"
+      local sessions = require("resession").list { dir = "project" }
 
-  vim.schedule(function()
-    vim.notify "Sessions list:"
-    local sessions = require("resession").list { dir = "project" }
+      vim.notify("Sessions: " .. vim.inspect(sessions))
+    end)
+  end
+end
 
-    vim.notify("Sessions: " .. vim.inspect(sessions))
+-- core/buffer_groups/groups.lua
+
+-- existing code...
+
+function M.get_buffers(group_name)
+  local session_file = M.session_name(group_name) .. ".json"
+  local session_path = vim.fn.stdpath "data" .. "/project/" .. session_file
+
+  if vim.fn.filereadable(session_path) == 0 then
+    vim.notify("Session file not found: " .. session_path, vim.log.levels.WARN)
+    return {}
+  end
+
+  local ok, data = pcall(function()
+    local content = table.concat(vim.fn.readfile(session_path), "\n")
+    return vim.json.decode(content)
   end)
+
+  if not ok or not data then
+    vim.notify("Failed to read session: " .. tostring(data), vim.log.levels.ERROR)
+    return {}
+  end
+
+  local bufs = {}
+  for _, buf in ipairs(data.buffers or {}) do
+    if buf.name and buf.name ~= "" then table.insert(bufs, vim.fn.fnamemodify(buf.name, ":t")) end
+  end
+
+  return bufs
 end
 
 return M

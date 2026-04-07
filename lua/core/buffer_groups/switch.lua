@@ -22,7 +22,6 @@ function M.switch(group_name)
   if not ok then vim.notify("Session not found: " .. group_name, vim.log.levels.WARN) end
 
   vim.cmd "redrawtabline"
-  vim.notify("Switched to group: " .. group_name)
 end
 
 return M
