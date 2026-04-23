@@ -82,4 +82,22 @@ function M.get_buffers(group_name)
   return bufs
 end
 
+-- add this helper
+function M.get_all_groups()
+  local state = require "core.buffer_groups.state"
+
+  local all = {}
+  for name, _ in pairs(state.groups) do
+    table.insert(all, name)
+  end
+  return all
+end
+
+-- existing delete_group function
+function M.delete_group(name)
+  local state = require "core.buffer_groups.state"
+  state.groups[name] = nil
+  if state.active_group == name then state.active_group = nil end
+end
+
 return M

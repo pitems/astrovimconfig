@@ -292,4 +292,34 @@ function M.rename_current()
   end)
 end
 
+-- Add this in your ui module or wherever you handle exit_all
+--
+function M.exit_all_with_confirm()
+  local resession = require "resession"
+  local state = require "core.buffer_groups.state"
+
+  local answer = vim.fn.input "Do you want to delete ALL buffer groups for this project? (y/N): "
+  if answer:lower() == "y" then
+    -- list all sessions in the project directory
+    local sessions = resession.list { dir = "project" }
+
+    for _, name in ipairs(sessions) do
+      if name:match "^bg_" then
+        local ok, err = pcall(resession.delete, name, { dir = "project" })
+        if not ok then
+          vim.notify("Failed to delete session: " .. name .. " (" .. tostring(err) .. ")", vim.log.levels.WARN)
+        end
+      end
+    end
+    state.active_group = nil
+
+    vim.notify("All buffer groups deleted for this project", vim.log.levels.INFO)
+
+    return
+  else
+    -- just exit without deleting
+    M.exit_all()
+  end
+end
+
 return M

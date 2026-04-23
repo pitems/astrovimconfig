@@ -5,15 +5,15 @@
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
 --theme selected
-local theme = require("user.theme")
+local theme = require "user.theme"
 ---@type LazySpec
 return {
   "AstroNvim/astroui",
   ---@type AstroUIOpts
-  
+
   opts = {
     -- change colorscheme
-    colorscheme = "astrodark",
+    colorscheme = "tokyonight",
 
     -- colorscheme = theme.colorscheme or "terafox",
     -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
@@ -24,6 +24,21 @@ return {
       astrodark = { -- a table of overrides/changes when applying the astrotheme theme
         -- Normal = { bg = "#000000" },
       },
+      cyberdream = {
+        BufferLineIndicatorSelected = {
+          sp = "#00D1FF", -- underline color
+          underline = true,
+        },
+        BufferLineIndicatorVisible = {
+          sp = "#5c6370",
+          underline = true,
+        },
+      },
+      -- tokyonight = {
+      --   BufferLineSeparator = { fg = "bg", bg = "bg" },
+      --   BufferLineSeparatorSelected = { fg = "bg", bg = "bg" },
+      --   BufferLineSeparatorVisible = { fg = "bg", bg = "bg" },
+      -- },
     },
     -- Icons can be configured throughout the interface
     icons = {

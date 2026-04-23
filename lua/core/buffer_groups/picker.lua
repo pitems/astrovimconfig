@@ -13,19 +13,6 @@ local groups = require "core.buffer_groups.groups"
 local switch = require "core.buffer_groups.switch"
 local state = require "core.buffer_groups.state"
 
--- Get buffers for a group
-local function get_buffers_for_group(group_name)
-  local session_file = groups.session_name(group_name)
-  local ok, session_data = pcall(resession.read, session_file, { dir = "project" })
-  if not ok or not session_data then return {} end
-
-  local bufs = {}
-  for _, buf in ipairs(session_data.buffers or {}) do
-    table.insert(bufs, vim.fn.fnamemodify(buf.name or "", ":t"))
-  end
-  return bufs
-end
-
 -- Build entries like the old picker
 local function get_entries_old_style()
   local sessions = resession.list { dir = "project" }
@@ -66,6 +53,7 @@ function M.open_picker2()
   local entries = get_entries_old_style()
   if vim.tbl_isempty(entries) then
     vim.notify("No buffer groups found", vim.log.levels.INFO)
+    ui.create_group()
     return
   end
 
@@ -75,10 +63,11 @@ function M.open_picker2()
       -- results_title = "Keymaps: [c]reate [r]ename [d]elete [e]xit | <CR> switch",
       layout_strategy = "horizontal",
       layout_config = {
-        width = 0.8,
+        width = 0.9,
         height = 0.6,
         prompt_position = "top",
         preview_width = 0.5,
+        mirror = false,
       },
     }, {
       finder = finders.new_table {
@@ -95,11 +84,45 @@ function M.open_picker2()
       previewer = previewers.new_buffer_previewer {
         define_preview = function(self, entry, status)
           local bufs = groups.get_buffers(entry.value) or {}
-          if vim.tbl_isempty(bufs) then
-            vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, { "<No buffers>" })
-          else
-            vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, bufs)
+          -- inside previewer define_preview
+          local lines = {
+            "Keybinds: [c]reate [r]ename [d]elete [e]xit | <CR> switch",
+            string.rep("─", 80),
+            "Buffers:",
+          }
+          vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+
+          local ns = vim.api.nvim_create_namespace "buffer_group_preview"
+          local bufnr = self.state.bufnr
+          local line = 0 -- first line (0-indexed)
+
+          -- Keybinds: [c]reate [r]ename [d]elete [e]xit | <CR> switch
+          local highlights = {
+            { start = 10, finish = 11 }, -- [c]
+            { start = 18, finish = 19 }, -- [r]
+            { start = 26, finish = 27 }, -- [d]
+            { start = 34, finish = 37 }, -- <CR>
+          }
+
+          for _, hl in ipairs(highlights) do
+            vim.hl.range(
+              bufnr,
+              ns,
+              "Keyword", -- highlight group
+              { line, hl.start }, -- start position
+              { line, hl.finish }, -- end position
+              { inclusive = false } -- optional, default false
+            )
           end
+          if vim.tbl_isempty(bufs) then
+            table.insert(lines, "  <No buffers>")
+          else
+            for _, buf in ipairs(bufs) do
+              table.insert(lines, "  " .. buf)
+            end
+          end
+
+          vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
         end,
       },
       attach_mappings = function(prompt_bufnr, map)
@@ -131,7 +154,7 @@ function M.open_picker2()
         map("i", "d", function() close_picker_and(ui.close_current) end)
 
         -- Exit all groups
-        map("i", "e", function() close_picker_and(ui.exit_all) end)
+        map("i", "e", function() close_picker_and(ui.exit_all_with_confirm()) end)
 
         return true
       end,

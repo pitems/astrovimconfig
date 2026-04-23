@@ -4,15 +4,15 @@ return {
   opts = function(_, opts)
     opts.options = opts.options or {}
 
-    --   if not show_only_pinned then return true end
-    --
-    --   -- 🔥 correct way to check if pinned
-    --   local groups = require "bufferline.groups"
-    --   local bufdata = groups.get_buf(buf)
-    --
-    --   return bufdata and bufdata.pinned
-    -- end
-    --
+    opts.options.indicator = {
+      style = "underline",
+      icon = "",
+    }
+    opts.options.tab_size = 18 -- or 20 if you want chunky tabs
+    opts.options.max_name_length = 18
+    opts.options.separator_style = "slant"
+    opts.options.themable = true
+
     return opts
   end,
   config = function(_, opts)
