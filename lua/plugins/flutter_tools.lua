@@ -9,14 +9,14 @@ return {
     },
 
     config = function()
-      local flutter_tools = require("flutter-tools")
+      local flutter_tools = require "flutter-tools"
 
-      flutter_tools.setup({
+      flutter_tools.setup {
         fvm = true,
 
         ui = {
           border = "rounded",
-          notification_style = "native",  -- recommended value in new version
+          notification_style = "native", -- recommended value in new version
         },
 
         decorations = {
@@ -42,54 +42,13 @@ return {
           run_via_dap = true,
           exception_breakpoints = {},
           register_configurations = function(paths)
-            local dap = require("dap")
-            local dapui = require("dapui")
+            local dap = require "dap"
 
-            dap.set_log_level("TRACE")
+            dap.set_log_level "TRACE"
 
             dap.defaults.flutter.exception_breakpoints = {
               { filter = "uncaught", action = "ignore" },
             }
-
-            dapui.setup({
-              icons = { expanded = "▾", collapsed = "▸" },
-              mappings = {
-                expand = { "<CR>", "<2-LeftMouse>" },
-                open = "o",
-                remove = "d",
-                edit = "e",
-                repl = "r",
-              },
-              layouts = {
-                {
-                  elements = {
-                    { id = "scopes", size = 0.25 },
-                    { id = "breakpoints", size = 0.25 },
-                    { id = "stacks", size = 0.25 },
-                    { id = "watches", size = 0.25 },
-                  },
-                  size = 40,
-                  position = "left",
-                },
-                {
-                  elements = {
-                    { id = "repl", size = 1.0 },
-                  },
-                  size = 20,
-                  position = "bottom",
-                },
-              },
-            })
-
-            dap.listeners.after.event_initialized["dapui_config"] = function()
-              dapui.open()
-            end
-            dap.listeners.before.event_terminated["dapui_config"] = function()
-              dapui.close()
-            end
-            dap.listeners.before.event_exited["dapui_config"] = function()
-              dapui.close()
-            end
 
             require("dap.ext.vscode").load_launchjs()
           end,
@@ -101,9 +60,7 @@ return {
         },
 
         lsp = {
-          on_attach = function(client, bufnr)
-            vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = bufnr })
-          end,
+          on_attach = function(client, bufnr) vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = bufnr }) end,
 
           -- ❗ DO NOT override capabilities manually
           -- The internal merge in new flutter-tools is correct.
@@ -124,7 +81,7 @@ return {
             updateImportsOnRename = true,
           },
         },
-      })
+      }
     end,
   },
 

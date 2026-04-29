@@ -59,3 +59,24 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.textwidth = 80
   end,
 })
+
+local function copy_relative_path()
+  local path = vim.fn.expand "%:."
+
+  vim.fn.setreg("+", path)
+  vim.fn.setreg("*", path)
+
+  vim.notify("Copied for Codex: " .. path, vim.log.levels.INFO)
+end
+
+vim.keymap.set("n", "<leader>rp", copy_relative_path, {
+  desc = "Copy relative path for Codex",
+  noremap = true,
+  silent = false,
+})
+
+vim.keymap.set("n", "yr", copy_relative_path, {
+  desc = "Yank relative path",
+  noremap = true,
+  silent = false,
+})
