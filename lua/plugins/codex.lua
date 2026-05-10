@@ -4,7 +4,7 @@ return {
   cmd = { "Codex", "CodexToggle" }, -- Optional: Load only on command execution
   keys = {
     {
-      "<leader>ac",
+      "<C-;>",
       "<cmd>CodexToggle<CR>",
       desc = "Toggle Codex popup or side-panel",
       mode = { "n", "t" },

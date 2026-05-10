@@ -1,9 +1,9 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroLSP allows you to customize the features in AstroNvim's LSP configuration engine
 -- Configuration documentation can be found with `:h astrolsp`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
+
+local vue = require("user.vue_lsp")
 
 ---@type LazySpec
 return {
@@ -54,6 +54,12 @@ return {
       -- the key is the server that is being setup with `lspconfig`
       -- rust_analyzer = false, -- setting a handler to false will disable the set up of that language server
       -- pyright = function(_, opts) require("lspconfig").pyright.setup(opts) end -- or a custom handler function can be passed
+      ts_ls = function(_, opts)
+        require("lspconfig").ts_ls.setup(vue.ts_ls(opts))
+      end,
+      vue_ls = function(_, opts)
+        require("lspconfig").vue_ls.setup(vue.vue_ls(opts))
+      end,
     },
     -- Configure buffer local auto commands to add when attaching a language server
     autocmds = {
@@ -97,9 +103,6 @@ return {
     },
     -- A custom `on_attach` function to be run after the default `on_attach` function
     -- takes two parameters `client` and `bufnr`  (`:h lspconfig-setup`)
-    on_attach = function(client, bufnr)
-      -- this would disable semanticTokensProvider for all clients
-      -- client.server_capabilities.semanticTokensProvider = nil
-    end,
+    on_attach = function(client, bufnr) end,
   },
 }
