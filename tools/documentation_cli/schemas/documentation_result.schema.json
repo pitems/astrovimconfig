@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.documentation.cli/schemas/documentation_result.schema.json",
+  "title": "DocumentationResult",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "language",
+    "sourcePath",
+    "docPath",
+    "template",
+    "symbols",
+    "dependencies",
+    "metadata",
+    "warnings"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string"
+    },
+    "sourcePath": {
+      "type": "string"
+    },
+    "docPath": {
+      "type": "string"
+    },
+    "template": {
+      "type": "object",
+      "required": ["name", "title", "sectionOrder"],
+      "properties": {
+        "name": { "type": "string" },
+        "title": { "type": "string" },
+        "sectionOrder": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "headings": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "symbols": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "name"],
+        "properties": {
+          "kind": { "type": "string" },
+          "name": { "type": "string" },
+          "signature": { "type": "string" },
+          "returnType": { "type": "string" },
+          "typeAnnotation": { "type": "string" },
+          "visibility": { "type": "string" },
+          "lineStart": { "type": "integer" },
+          "lineEnd": { "type": "integer" },
+          "children": {
+            "type": "array",
+            "items": { "$ref": "#" }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "kind": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["generatedAt", "analyzer", "sourceLineCount"],
+      "properties": {
+        "generatedAt": { "type": "string" },
+        "analyzer": { "type": "string" },
+        "toolVersion": { "type": "string" },
+        "sourceHash": { "type": "string" },
+        "sourceLineCount": { "type": "integer" }
+      },
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}
+

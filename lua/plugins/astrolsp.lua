@@ -5,6 +5,52 @@
 
 local vue = require("user.vue_lsp")
 
+local function vue_jump_to_local_symbol(word)
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local escaped = vim.pesc(word)
+
+  for i, line in ipairs(lines) do
+    if line:match("^%s*import%s+" .. escaped .. "%s+from%s+")
+      or line:match("^%s*const%s+" .. escaped .. "%s*=")
+      or line:match("^%s*let%s+" .. escaped .. "%s*=")
+      or line:match("^%s*var%s+" .. escaped .. "%s*=")
+    then
+      local col = line:find(word, 1, true) or 1
+      vim.api.nvim_win_set_cursor(0, { i, math.max(col - 1, 0) })
+      return true
+    end
+  end
+
+  return false
+end
+
+local function vue_buffer_references(word)
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local items = {}
+
+  for i, line in ipairs(lines) do
+    local start_col = line:find(word, 1, true)
+    if start_col then
+      items[#items + 1] = {
+        filename = vim.api.nvim_buf_get_name(bufnr),
+        lnum = i,
+        col = start_col,
+        text = line,
+      }
+    end
+  end
+
+  if #items == 0 then
+    return false
+  end
+
+  vim.fn.setqflist(items, "r")
+  vim.cmd.copen()
+  return true
+end
+
 ---@type LazySpec
 return {
   "AstroNvim/astrolsp",
@@ -103,6 +149,29 @@ return {
     },
     -- A custom `on_attach` function to be run after the default `on_attach` function
     -- takes two parameters `client` and `bufnr`  (`:h lspconfig-setup`)
-    on_attach = function(client, bufnr) end,
+    on_attach = function(client, bufnr)
+      local opts = { buffer = bufnr, silent = true }
+
+      vim.keymap.set("n", "gd", function()
+        if vim.bo.filetype == "vue" then
+          local word = vim.fn.expand "<cword>"
+          if word ~= "" and vue_jump_to_local_symbol(word) then return end
+        end
+
+        vim.lsp.buf.definition()
+      end, opts)
+
+      vim.keymap.set("n", "gr", function()
+        if vim.bo.filetype == "vue" then
+          local word = vim.fn.expand "<cword>"
+          if word ~= "" and vue_buffer_references(word) then return end
+        end
+
+        vim.lsp.buf.references()
+      end, opts)
+
+      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+    end,
   },
 }
