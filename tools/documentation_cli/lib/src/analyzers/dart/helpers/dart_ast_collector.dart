@@ -224,6 +224,8 @@ class DartAstCollector extends RecursiveAstVisitor<void> {
         lineEnd: _lineNumber(node.end),
         metadata: <String, dynamic>{
           'isAbstract': node.abstractKeyword != null,
+          if (node.extendsClause != null)
+            'superclass': node.extendsClause!.superclass.toSource(),
         },
       ),
     );

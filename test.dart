@@ -15,6 +15,7 @@ class ReducerManager {
   }
 
   int attempts = 0;
+  int leCounter = 0;
   String channel = 'sms';
   final ClassTest service;
   String title;

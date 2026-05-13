@@ -126,16 +126,54 @@ class CliApplication {
 
   DocumentationRequest _buildRequest(_ParsedOptions parsed) {
     final source = parsed.required('source');
-    final docPath = parsed.required('doc-path');
     final fileType = parsed.required('filetype');
+    final projectRoot = parsed.value('project-root');
+    final docPath = _docPathForSource(
+      source,
+      projectRoot: projectRoot,
+    );
     return DocumentationRequest(
       sourcePath: source,
       docPath: docPath,
       fileType: fileType,
-      projectRoot: parsed.value('project-root'),
+      projectRoot: projectRoot,
       sourceText: parsed.value('source-text'),
       templateName: parsed.value('template'),
     );
+  }
+
+  String _docPathForSource(
+    String sourcePath, {
+    String? projectRoot,
+  }) {
+    final root = projectRoot ?? _guessProjectRoot(sourcePath);
+    final normalizedSource = sourcePath.replaceAll('\\', '/');
+    final normalizedRoot = root.replaceAll('\\', '/').replaceFirst(RegExp(r'/$'), '');
+    final projectPrefix = '$normalizedRoot/';
+    final libPrefix = '$normalizedRoot/lib/';
+
+    String relative;
+    if (normalizedSource.startsWith(libPrefix)) {
+      relative = normalizedSource.substring(libPrefix.length);
+    } else if (normalizedSource.startsWith(projectPrefix)) {
+      relative = normalizedSource.substring(projectPrefix.length);
+    } else {
+      relative = normalizedSource.split('/').last;
+    }
+
+    relative = relative.replaceFirst(RegExp(r'\.[^.]+$'), '');
+    return '$normalizedRoot/documentation/$relative.md';
+  }
+
+  String _guessProjectRoot(String sourcePath) {
+    final normalized = sourcePath.replaceAll('\\', '/');
+    final libIndex = normalized.lastIndexOf('/lib/');
+    if (libIndex > 0) {
+      return normalized.substring(0, libIndex);
+    }
+
+    final dir = File(sourcePath).parent;
+    return dir.path;
   }
 
   Future<void> _writeMaybe(String? outputPath, String content) async {

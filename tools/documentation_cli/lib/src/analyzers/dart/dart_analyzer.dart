@@ -7,6 +7,7 @@ import '../../models/documentation_metadata.dart';
 import '../../models/documentation_request.dart';
 import '../../models/documentation_result.dart';
 import '../../models/documentation_template.dart';
+import '../../models/documentation_symbol.dart';
 import '../document_analyzer.dart';
 import 'helpers/dart_ast_collector.dart';
 
@@ -34,6 +35,7 @@ class DartAnalyzer implements DocumentAnalyzer {
       sourcePath: request.sourcePath,
     );
     parsed.unit.accept(visitor);
+    final layout = _detectLayout(visitor.symbols);
 
     final warnings = <String>[
       ...parsed.errors.map((error) => error.message),
@@ -44,8 +46,9 @@ class DartAnalyzer implements DocumentAnalyzer {
       sourcePath: request.sourcePath,
       docPath: request.docPath,
       projectRoot: request.projectRoot,
-      template: DocumentationTemplate.defaultFor(
-        'Documentation: ${_baseNameWithoutExtension(request.sourcePath)}',
+      template: _templateFor(
+        layout: layout,
+        title: 'Documentation: ${_baseNameWithoutExtension(request.sourcePath)}',
       ),
       symbols: visitor.symbols,
       dependencies: visitor.dependencies,
@@ -80,5 +83,55 @@ class DartAnalyzer implements DocumentAnalyzer {
       return normalized.substring(0, libIndex);
     }
     return File(sourcePath).parent.path;
+  }
+
+  DocumentationTemplate _templateFor({
+    required String layout,
+    required String title,
+  }) {
+    switch (layout) {
+      case DocumentationContract.templateLayoutController:
+        return DocumentationTemplate.controllerFor(title);
+      default:
+        return DocumentationTemplate.moduleFor(title);
+    }
+  }
+
+  String _detectLayout(List<DocumentationSymbol> symbols) {
+    final classes = symbols.where((symbol) => symbol.kind == 'class').toList();
+    final topLevelFunctions = symbols.where((symbol) => symbol.kind == 'function').length;
+    final topLevelVariables = symbols.where((symbol) => symbol.kind == 'variable').length;
+
+    if (classes.isEmpty) {
+      return DocumentationContract.templateLayoutModule;
+    }
+
+    final totalClassMembers = classes.fold<int>(
+      0,
+      (sum, symbol) => sum + symbol.children.length,
+    );
+    final primaryClass = classes.first;
+    final primaryName = primaryClass.name;
+    final hasControllerName = RegExp(r'(controller|bloc|manager|state|cubit)$', caseSensitive: false)
+        .hasMatch(primaryName);
+    final inheritedControllerType = _classInheritanceSuggestsController(primaryClass);
+    final classDominates = totalClassMembers >= 1 &&
+        totalClassMembers >= (topLevelFunctions + topLevelVariables);
+
+    if ((hasControllerName || inheritedControllerType) && classDominates) {
+      return DocumentationContract.templateLayoutController;
+    }
+
+    return DocumentationContract.templateLayoutModule;
+  }
+
+  bool _classInheritanceSuggestsController(DocumentationSymbol classSymbol) {
+    final superclass = (classSymbol.metadata['superclass'] as String?) ?? '';
+    if (superclass.isEmpty) {
+      return false;
+    }
+
+    return RegExp(r'(cubit|bloc|controller|manager|state)$', caseSensitive: false)
+        .hasMatch(superclass);
   }
 }

@@ -2,6 +2,8 @@ class DocumentationContract {
   static const String schemaVersion = '1.0.0';
   static const String toolVersion = '0.1.0';
   static const String defaultTemplateName = 'neovim_standard';
+  static const String templateLayoutModule = 'module';
+  static const String templateLayoutController = 'controller';
 
   static const List<String> defaultSectionOrder = <String>[
     'overview',

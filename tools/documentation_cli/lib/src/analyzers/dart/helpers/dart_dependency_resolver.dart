@@ -45,7 +45,7 @@ class DartDependencyResolver {
     final relative = resolveInternalRelativePath(uriValue);
     // Mirror internal references under documentation/ using the same tree shape.
     final sourceAbsolute = resolveInternalSourcePath(uriValue, root, sourceDir, relative);
-    final docPath = '$root/documentation/${relative.replaceFirst(RegExp(r'\.[^.]+$'), '')}.md';
+    final docPath = _docPathForSourcePath(sourceAbsolute, root);
     final sourceFileName = relative.split('/').last;
 
     return DocumentationReference(
@@ -55,6 +55,25 @@ class DartDependencyResolver {
       exists: File(docPath).existsSync(),
       kind: 'import',
     );
+  }
+
+  String _docPathForSourcePath(String sourceAbsolute, String root) {
+    final normalizedSource = sourceAbsolute.replaceAll('\\', '/');
+    final normalizedRoot = root.replaceAll('\\', '/').replaceFirst(RegExp(r'/$'), '');
+    final libPrefix = '$normalizedRoot/lib/';
+    final rootPrefix = '$normalizedRoot/';
+
+    String relative;
+    if (normalizedSource.startsWith(libPrefix)) {
+      relative = normalizedSource.substring(libPrefix.length);
+    } else if (normalizedSource.startsWith(rootPrefix)) {
+      relative = normalizedSource.substring(rootPrefix.length);
+    } else {
+      relative = normalizedSource.split('/').last;
+    }
+
+    relative = relative.replaceFirst(RegExp(r'\.[^.]+$'), '');
+    return '$normalizedRoot/documentation/$relative.md';
   }
 
   String resolveInternalRelativePath(String uriValue) {

@@ -5,7 +5,7 @@
 - Language: `dart`
 - Source: `/Users/pitems/.config/nvim/test.dart`
 - Documentation: `/Users/pitems/.config/nvim/documentation/test.md`
-- Generated: `2026-05-13T05:08:19.994645Z`
+- Generated: `2026-05-13T06:17:32.805571Z`
 
 ## Classes
 
@@ -17,6 +17,8 @@
 ##### static ReducerManager? _instance
 
 ##### int attempts
+
+##### int leCounter
 
 ##### String channel
 

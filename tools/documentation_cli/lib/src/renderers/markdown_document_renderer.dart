@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../contracts/documentation_contract.dart';
 import '../models/documentation_parameter.dart';
 import '../models/documentation_result.dart';
 import '../models/documentation_symbol.dart';
@@ -23,6 +24,9 @@ class MarkdownDocumentRenderer {
     final classRenameMatches = <String, _ExistingEntry>{};
     final classMemberRenameMatches = <String, _ExistingEntry>{};
     final handledClassMemberKeys = <String>{};
+    final resetLegacyModuleHistory =
+        result.template.layout == DocumentationContract.templateLayoutController &&
+        !existing.hasClassStructure;
 
     for (final entry in existing.entries.where((entry) => entry.section == 'functions')) {
       if (currentFunctionNames.contains(entry.name)) {
@@ -147,91 +151,99 @@ class MarkdownDocumentRenderer {
     final deprecatedEntries = <_ExistingEntry>[];
     final deprecatedSeen = <String>{};
 
-    for (final entry in existing.entries.where((entry) => entry.section == 'deprecated')) {
-      if (entry.className == null &&
-          classRenameMatches.values.any((candidate) => candidate.name == entry.name)) {
-        continue;
+    if (!resetLegacyModuleHistory) {
+      for (final entry in existing.entries.where((entry) => entry.section == 'deprecated')) {
+        if (entry.className == null &&
+            classRenameMatches.values.any((candidate) => candidate.name == entry.name)) {
+          continue;
+        }
+        if (entry.className != null &&
+            handledClassMemberKeys.contains(
+              _classMemberKey(entry.className!, entry.subgroup ?? '', entry.name),
+            )) {
+          continue;
+        }
+        deprecatedEntries.add(entry);
+        deprecatedSeen.add(_normalizeHeading(entry.heading));
       }
-      if (entry.className != null &&
-          handledClassMemberKeys.contains(
-            _classMemberKey(entry.className!, entry.subgroup ?? '', entry.name),
-          )) {
-        continue;
-      }
-      deprecatedEntries.add(entry);
-      deprecatedSeen.add(_normalizeHeading(entry.heading));
     }
 
     final renamedOldNames = renameMatches.values.map((entry) => entry.name).toSet();
 
-    for (final entry in existing.entries.where((entry) => entry.section == 'functions')) {
-      if (exactFunctionMatches.containsKey(entry.name) || renamedOldNames.contains(entry.name)) {
-        continue;
-      }
+    if (!resetLegacyModuleHistory) {
+      for (final entry in existing.entries.where((entry) => entry.section == 'functions')) {
+        if (exactFunctionMatches.containsKey(entry.name) || renamedOldNames.contains(entry.name)) {
+          continue;
+        }
 
-      // Anything that disappeared from source becomes an archived entry.
-      final normalized = _normalizeHeading(entry.heading);
-      if (deprecatedSeen.contains(normalized)) {
-        continue;
-      }
+        // Anything that disappeared from source becomes an archived entry.
+        final normalized = _normalizeHeading(entry.heading);
+        if (deprecatedSeen.contains(normalized)) {
+          continue;
+        }
 
-      deprecatedEntries.add(
-        _ExistingEntry(
-          section: 'deprecated',
-          heading: _ensureDeprecatedHeading(entry.heading),
-          name: entry.name,
-          bodyLines: entry.bodyLines,
-          removedOn: entry.removedOn ?? _today(),
-        ),
-      );
-      deprecatedSeen.add(normalized);
+        deprecatedEntries.add(
+          _ExistingEntry(
+            section: 'deprecated',
+            heading: _ensureDeprecatedHeading(entry.heading),
+            name: entry.name,
+            bodyLines: entry.bodyLines,
+            removedOn: entry.removedOn ?? _today(),
+          ),
+        );
+        deprecatedSeen.add(normalized);
+      }
     }
 
-    for (final entry in existing.entries.where((entry) => entry.section == 'class-member')) {
-      final key = _classMemberKey(entry.className ?? '', entry.subgroup ?? '', entry.name);
-      if (handledClassMemberKeys.contains(key)) {
-        continue;
-      }
+    if (!resetLegacyModuleHistory) {
+      for (final entry in existing.entries.where((entry) => entry.section == 'class-member')) {
+        final key = _classMemberKey(entry.className ?? '', entry.subgroup ?? '', entry.name);
+        if (handledClassMemberKeys.contains(key)) {
+          continue;
+        }
 
-      final normalized = _normalizeHeading(entry.heading);
-      if (deprecatedSeen.contains(normalized)) {
-        continue;
-      }
+        final normalized = _normalizeHeading(entry.heading);
+        if (deprecatedSeen.contains(normalized)) {
+          continue;
+        }
 
-      deprecatedEntries.add(
-        _ExistingEntry(
-          section: 'deprecated',
-          heading: _ensureDeprecatedHeading(entry.heading),
-          name: entry.name,
-          bodyLines: entry.bodyLines,
-          removedOn: entry.removedOn ?? _today(),
-          className: entry.className,
-          subgroup: entry.subgroup,
-        ),
-      );
-      deprecatedSeen.add(normalized);
+        deprecatedEntries.add(
+          _ExistingEntry(
+            section: 'deprecated',
+            heading: _ensureDeprecatedHeading(entry.heading),
+            name: entry.name,
+            bodyLines: entry.bodyLines,
+            removedOn: entry.removedOn ?? _today(),
+            className: entry.className,
+            subgroup: entry.subgroup,
+          ),
+        );
+        deprecatedSeen.add(normalized);
+      }
     }
 
-    for (final entry in existing.entries.where((entry) => entry.section == 'classes')) {
-      if (exactClassMatches.containsKey(entry.name) || classRenameMatches.values.contains(entry)) {
-        continue;
-      }
+    if (!resetLegacyModuleHistory) {
+      for (final entry in existing.entries.where((entry) => entry.section == 'classes')) {
+        if (exactClassMatches.containsKey(entry.name) || classRenameMatches.values.contains(entry)) {
+          continue;
+        }
 
-      final normalized = _normalizeHeading(entry.heading);
-      if (deprecatedSeen.contains(normalized)) {
-        continue;
-      }
+        final normalized = _normalizeHeading(entry.heading);
+        if (deprecatedSeen.contains(normalized)) {
+          continue;
+        }
 
-      deprecatedEntries.add(
-        _ExistingEntry(
-          section: 'deprecated',
-          heading: _ensureDeprecatedHeading(entry.heading),
-          name: entry.name,
-          bodyLines: entry.bodyLines,
-          removedOn: entry.removedOn ?? _today(),
-        ),
-      );
-      deprecatedSeen.add(normalized);
+        deprecatedEntries.add(
+          _ExistingEntry(
+            section: 'deprecated',
+            heading: _ensureDeprecatedHeading(entry.heading),
+            name: entry.name,
+            bodyLines: entry.bodyLines,
+            removedOn: entry.removedOn ?? _today(),
+          ),
+        );
+        deprecatedSeen.add(normalized);
+      }
     }
 
     final buffer = StringBuffer();
@@ -1317,7 +1329,7 @@ class MarkdownDocumentRenderer {
 
     final resolvedDocPath = reference.docPath.isNotEmpty
         ? reference.docPath
-        : _docPathForInternalReference(reference.sourcePath, sourcePath);
+        : _docPathForSourcePath(reference.sourcePath, sourcePath);
 
     return _ResolvedReference(
       name: reference.name,
@@ -1356,18 +1368,25 @@ class MarkdownDocumentRenderer {
     );
   }
 
-  String _docPathForInternalReference(String uriValue, String sourcePath) {
+  String _docPathForSourcePath(String sourcePath, String currentSourcePath) {
     // Mirror the source tree under documentation/ to keep links predictable.
-    final cleaned = uriValue
-        .replaceFirst(RegExp(r'^package:[^/]+/'), '')
-        .replaceFirst(RegExp(r'^\.\/'), '')
-        .replaceFirst(RegExp(r'^\.\.\/'), '')
-        .replaceFirst(RegExp(r'^lib\/'), '');
+    final root = _guessProjectRoot(currentSourcePath);
+    final normalizedSource = sourcePath.replaceAll('\\', '/');
+    final normalizedRoot = root.replaceAll('\\', '/').replaceFirst(RegExp(r'/$'), '');
+    final libPrefix = '$normalizedRoot/lib/';
+    final rootPrefix = '$normalizedRoot/';
 
-    final relative = cleaned.replaceFirst(RegExp(r'\.[^.]+$'), '');
-    final docRelative = relative.replaceFirst(RegExp(r'^lib\/'), '');
-    final root = _guessProjectRoot(sourcePath);
-    return '$root/documentation/$docRelative.md';
+    String relative;
+    if (normalizedSource.startsWith(libPrefix)) {
+      relative = normalizedSource.substring(libPrefix.length);
+    } else if (normalizedSource.startsWith(rootPrefix)) {
+      relative = normalizedSource.substring(rootPrefix.length);
+    } else {
+      relative = normalizedSource.split('/').last;
+    }
+
+    relative = relative.replaceFirst(RegExp(r'\.[^.]+$'), '');
+    return '$normalizedRoot/documentation/$relative.md';
   }
 
   bool _isInsideProject(String path, String projectRoot) {
@@ -1404,6 +1423,12 @@ class _ExistingMarkdown {
   const _ExistingMarkdown({required this.entries});
 
   final List<_ExistingEntry> entries;
+
+  bool get hasClassStructure {
+    return entries.any(
+      (entry) => entry.section == 'classes' || entry.section == 'class-member',
+    );
+  }
 
   const _ExistingMarkdown.empty() : entries = const <_ExistingEntry>[];
 
