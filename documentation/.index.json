@@ -1,0 +1,593 @@
+{
+  "version": 1,
+  "documents": [
+    {
+      "doc_id": "doc_651b5bc0f0cbf4fb7ba05",
+      "source_path": "/Users/pitems/.config/nvim/test.dart",
+      "doc_path": "/Users/pitems/.config/nvim/documentation/test.md",
+      "layout": "controller",
+      "fingerprint": "28609d4311e77f02",
+      "snapshot": {
+        "layout": "controller",
+        "symbols": [
+          {
+            "kind": "class",
+            "name": "AuditController",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "AuditController",
+                "signature": "AuditController({required this.service, required this.sessionId})",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "constructor",
+                "name": "fromService",
+                "signature": "factory AuditController.fromService(ClassTest service)",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": true
+                }
+              },
+              {
+                "kind": "field",
+                "name": "active",
+                "typeAnnotation": "bool",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "service",
+                "typeAnnotation": "ClassTest",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "sessionId",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_privateTag",
+                "signature": "String _privateTag()",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "refresh",
+                "signature": "Future<void> refresh({required int retryCount})",
+                "returnType": "Future<void>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "reset",
+                "signature": "void reset()",
+                "returnType": "void",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "start",
+                "signature": "void start()",
+                "returnType": "void",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "stop",
+                "signature": "void stop()",
+                "returnType": "void",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "summarize",
+                "signature": "String summarize(String prefix)",
+                "returnType": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "getter",
+                "name": "isRunning",
+                "signature": "bool get isRunning",
+                "returnType": "bool",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": true,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "ReducerManager",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "ReducerManager",
+                "signature": "ReducerManager({required this.service, required this.title, this.status = 'idle'})",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "constructor",
+                "name": "_privateConstructor",
+                "signature": "ReducerManager._privateConstructor()",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "constructor",
+                "name": "fromSeed",
+                "signature": "factory ReducerManager.fromSeed(int seed)",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": true
+                }
+              },
+              {
+                "kind": "field",
+                "name": "_instance",
+                "typeAnnotation": "ReducerManager?",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "field",
+                "name": "attempts",
+                "typeAnnotation": "int",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "channel",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "leCounter",
+                "typeAnnotation": "int",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "service",
+                "typeAnnotation": "ClassTest",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "status",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": true,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "title",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_privateToken",
+                "signature": "String _privateToken()",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "disposeInstance",
+                "signature": "void disposeInstance()",
+                "returnType": "void",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "formatTextV2",
+                "signature": "String formatTextV2(String prefix, String suffix)",
+                "returnType": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "init",
+                "signature": "void init()",
+                "returnType": "void",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "processText",
+                "signature": "Future<void> processText(String input)",
+                "returnType": "Future<void>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "pushOtp",
+                "signature": "Future<void> pushOtp({required String phoneNumber, required bool urgent})",
+                "returnType": "Future<void>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "getter",
+                "name": "instance",
+                "signature": "ReducerManager get instance",
+                "returnType": "ReducerManager",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": true,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "getter",
+                "name": "isReady",
+                "signature": "bool get isReady",
+                "returnType": "bool",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": true,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "setter",
+                "name": "setText",
+                "signature": "set setText(String value)",
+                "returnType": "void",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": true,
+                  "isStatic": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "updated_at": "2026-05-13T16:47:26.296266Z"
+    },
+    {
+      "doc_id": "doc_651b5bc5dd1ba4230d40d",
+      "source_path": "/Users/pitems/.config/nvim/module.ts",
+      "doc_path": "/Users/pitems/.config/nvim/documentation/module.md",
+      "layout": "module",
+      "fingerprint": "26718a70037fbb07",
+      "snapshot": {
+        "layout": "module",
+        "symbols": [
+          {
+            "kind": "enum",
+            "name": "MenuKind",
+            "visibility": "public",
+            "metadata": {
+              "isConst": true,
+              "memberCount": 2
+            },
+            "children": [
+              {
+                "kind": "enum-member",
+                "name": "primary",
+                "visibility": "public",
+                "metadata": {
+                  "value": "'primary'"
+                }
+              },
+              {
+                "kind": "enum-member",
+                "name": "secondary",
+                "visibility": "public",
+                "metadata": {
+                  "value": "'secondary'"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "name": "formatLabel",
+            "signature": "string formatLabel<T extends MenuTitle>(input: T)",
+            "returnType": "string",
+            "visibility": "public",
+            "metadata": {
+              "isAsync": false,
+              "isExternal": false,
+              "isGetter": false,
+              "isSetter": false
+            }
+          },
+          {
+            "kind": "function",
+            "name": "helperV3",
+            "signature": "string helperV3<T extends MenuTitle>(input: T)",
+            "returnType": "string",
+            "visibility": "public",
+            "metadata": {
+              "isAsync": false,
+              "isExternal": false,
+              "isGetter": false,
+              "isSetter": false
+            }
+          },
+          {
+            "kind": "interface",
+            "name": "MenuItem",
+            "visibility": "public",
+            "metadata": {
+              "extends": [
+                "NamedItem"
+              ],
+              "isAbstract": true
+            },
+            "children": [
+              {
+                "kind": "field",
+                "name": "icon",
+                "signature": "icon?: string",
+                "typeAnnotation": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "title",
+                "signature": "title: string",
+                "typeAnnotation": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "render",
+                "signature": "string render()",
+                "returnType": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": true,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "interface",
+            "name": "NamedItem",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": true
+            },
+            "children": [
+              {
+                "kind": "field",
+                "name": "name",
+                "signature": "name: string",
+                "typeAnnotation": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "type-alias",
+            "name": "MenuMap",
+            "visibility": "public",
+            "metadata": {
+              "type": "Record<string, T>",
+              "typeParameters": [
+                "T"
+              ]
+            }
+          },
+          {
+            "kind": "type-alias",
+            "name": "MenuTitle",
+            "visibility": "public",
+            "metadata": {
+              "type": "string | number"
+            }
+          }
+        ]
+      },
+      "updated_at": "2026-05-13T17:02:21.320Z"
+    }
+  ]
+}

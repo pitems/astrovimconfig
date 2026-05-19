@@ -39,6 +39,15 @@ require("resession").setup {
 
 require("core.buffer_groups").setup()
 
+for _, autocmd in ipairs(require("user.autocmds")) do
+  vim.api.nvim_create_autocmd(autocmd.event, {
+    desc = autocmd.desc,
+    callback = autocmd.callback,
+    pattern = autocmd.pattern,
+    group = autocmd.group,
+  })
+end
+
 do
   -- Neovim 0.12's built-in markdown ftplugin unconditionally calls
   -- `vim.treesitter.start()`. If the installed markdown parser is stale or

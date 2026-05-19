@@ -4,6 +4,7 @@ local modules = {
   "keybinds.groups.general",
   "keybinds.groups.documentation",
   "keybinds.groups.flutter",
+  "keybinds.groups.insert",
   "keybinds.groups.language",
   "keybinds.groups.marks",
   "keybinds.groups.debugger",
@@ -18,4 +19,3 @@ for _, module in ipairs(modules) do
 end
 
 wk.register(mappings)
-

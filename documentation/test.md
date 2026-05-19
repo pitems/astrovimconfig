@@ -5,12 +5,11 @@
 - Language: `dart`
 - Source: `/Users/pitems/.config/nvim/test.dart`
 - Documentation: `/Users/pitems/.config/nvim/documentation/test.md`
-- Generated: `2026-05-13T06:17:32.805571Z`
+- Generated: `2026-05-13T16:47:26.296266Z`
 
 ## Classes
 
 ### ReducerManager
-> Manual note: this controller owns flow state and should preserve this note.
 
 #### Variables
 
@@ -53,10 +52,6 @@
 ##### set setText(String value)
 
 ##### String formatTextV2(String prefix, String suffix)
-_Renamed from `formatText`_
-
-This is a human note for the formatting helper.
-> Manual note: format text before dispatch.
 
 ##### String _privateToken()
 
@@ -97,56 +92,7 @@ This is a human note for the formatting helper.
 
 ## Deprecated
 
-### OtpBloc: OtpBloc({required this.service, required this.title, this.status = 'idle'}) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### OtpBloc: Future<void> requestVerification({required String phoneNumber, required bool urgent}) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### OtpBloc: set displayTitle(String value) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### OtpBloc: String composeSummary(String prefix, String suffix) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### AuditController: void reset() ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### AuditController: String summarize(String prefix) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### VerificationBloc: VerificationBloc({required this.service, required this.title, this.status = 'idle'}) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### VerificationBloc: Future<void> requestOtp({required String phoneNumber, required bool urgent}) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### VerificationBloc: set displayLabel(String value) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### VerificationBloc: String buildMessage(String prefix, String suffix) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### AuditController: int retries ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### AuditController: void resetState() ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### AuditController: String describe(String prefix) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### StateManager: StateManager({required this.service, required this.title, this.status = 'idle'}) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### StateManager: Future<void> sendOtp({required String phoneNumber, required bool urgent}) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### StateManager: set updateLabel(String value) ⚠️ Deprecated
-- Removed on `2026-05-13`
-
-### StateManager: String composeMessage(String prefix, String suffix) ⚠️ Deprecated
-- Removed on `2026-05-13`
+_No deprecated entries yet._
 
 ## Dependencies
 

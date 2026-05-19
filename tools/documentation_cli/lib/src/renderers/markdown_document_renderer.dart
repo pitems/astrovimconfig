@@ -4,23 +4,36 @@ import '../contracts/documentation_contract.dart';
 import '../models/documentation_parameter.dart';
 import '../models/documentation_result.dart';
 import '../models/documentation_symbol.dart';
+import 'manual_body_sanitizer.dart';
 
 class MarkdownDocumentRenderer {
+  ManualBodySanitizer _manualBodySanitizer = const BaseManualBodySanitizer();
+
   String render(
     DocumentationResult result, {
     String? existingMarkdown,
   }) {
     // Start from the previous markdown so manual notes can survive updates.
+    _manualBodySanitizer = _sanitizerFor(result.language);
     final existing = _ExistingMarkdown.parse(existingMarkdown);
     final currentFunctions = result.symbols.where((symbol) => symbol.kind == 'function').toList();
     final currentVariables = result.symbols.where((symbol) => symbol.kind == 'variable').toList();
     final currentClasses = result.symbols.where((symbol) => symbol.kind == 'class').toList();
+    final currentInterfaces = result.symbols.where((symbol) => symbol.kind == 'interface').toList();
+    final currentEnums = result.symbols.where((symbol) => symbol.kind == 'enum').toList();
+    final currentTypeAliases = result.symbols.where((symbol) => symbol.kind == 'type-alias').toList();
     final currentFunctionNames = currentFunctions.map((symbol) => symbol.name).toSet();
     final currentVariableNames = currentVariables.map((symbol) => symbol.name).toSet();
+    final currentInterfaceNames = currentInterfaces.map((symbol) => symbol.name).toSet();
+    final currentEnumNames = currentEnums.map((symbol) => symbol.name).toSet();
+    final currentTypeAliasNames = currentTypeAliases.map((symbol) => symbol.name).toSet();
 
     final exactFunctionMatches = <String, _ExistingEntry>{};
     final exactVariableMatches = <String, _ExistingEntry>{};
     final exactClassMatches = <String, _ExistingEntry>{};
+    final exactInterfaceMatches = <String, _ExistingEntry>{};
+    final exactEnumMatches = <String, _ExistingEntry>{};
+    final exactTypeAliasMatches = <String, _ExistingEntry>{};
     final classRenameMatches = <String, _ExistingEntry>{};
     final classMemberRenameMatches = <String, _ExistingEntry>{};
     final handledClassMemberKeys = <String>{};
@@ -52,6 +65,24 @@ class MarkdownDocumentRenderer {
         if (entry.name == classSymbol.name) {
           exactClassMatches[classSymbol.name] = entry;
         }
+      }
+    }
+
+    for (final entry in existing.entries.where((entry) => entry.section == 'interfaces')) {
+      if (currentInterfaceNames.contains(entry.name)) {
+        exactInterfaceMatches[entry.name] = entry;
+      }
+    }
+
+    for (final entry in existing.entries.where((entry) => entry.section == 'enums')) {
+      if (currentEnumNames.contains(entry.name)) {
+        exactEnumMatches[entry.name] = entry;
+      }
+    }
+
+    for (final entry in existing.entries.where((entry) => entry.section == 'type-aliases')) {
+      if (currentTypeAliasNames.contains(entry.name)) {
+        exactTypeAliasMatches[entry.name] = entry;
       }
     }
 
@@ -154,6 +185,13 @@ class MarkdownDocumentRenderer {
     if (!resetLegacyModuleHistory) {
       for (final entry in existing.entries.where((entry) => entry.section == 'deprecated')) {
         if (entry.className == null &&
+            (currentFunctionNames.contains(entry.name) ||
+                currentVariableNames.contains(entry.name) ||
+                currentInterfaceNames.contains(entry.name) ||
+                currentEnumNames.contains(entry.name) ||
+                currentTypeAliasNames.contains(entry.name) ||
+                currentClasses.any((symbol) => symbol.name == entry.name)) ||
+            entry.className == null &&
             classRenameMatches.values.any((candidate) => candidate.name == entry.name)) {
           continue;
         }
@@ -172,7 +210,9 @@ class MarkdownDocumentRenderer {
 
     if (!resetLegacyModuleHistory) {
       for (final entry in existing.entries.where((entry) => entry.section == 'functions')) {
-        if (exactFunctionMatches.containsKey(entry.name) || renamedOldNames.contains(entry.name)) {
+        if (currentFunctionNames.contains(entry.name) ||
+            exactFunctionMatches.containsKey(entry.name) ||
+            renamedOldNames.contains(entry.name)) {
           continue;
         }
 
@@ -224,7 +264,81 @@ class MarkdownDocumentRenderer {
 
     if (!resetLegacyModuleHistory) {
       for (final entry in existing.entries.where((entry) => entry.section == 'classes')) {
-        if (exactClassMatches.containsKey(entry.name) || classRenameMatches.values.contains(entry)) {
+        if (currentClasses.any((symbol) => symbol.name == entry.name) ||
+            exactClassMatches.containsKey(entry.name) ||
+            classRenameMatches.values.contains(entry)) {
+          continue;
+        }
+
+        final normalized = _normalizeHeading(entry.heading);
+        if (deprecatedSeen.contains(normalized)) {
+          continue;
+        }
+
+        deprecatedEntries.add(
+          _ExistingEntry(
+            section: 'deprecated',
+            heading: _ensureDeprecatedHeading(entry.heading),
+            name: entry.name,
+            bodyLines: entry.bodyLines,
+            removedOn: entry.removedOn ?? _today(),
+          ),
+        );
+        deprecatedSeen.add(normalized);
+      }
+    }
+
+    if (!resetLegacyModuleHistory) {
+      for (final entry in existing.entries.where((entry) => entry.section == 'interfaces')) {
+        if (currentInterfaceNames.contains(entry.name)) {
+          continue;
+        }
+
+        final normalized = _normalizeHeading(entry.heading);
+        if (deprecatedSeen.contains(normalized)) {
+          continue;
+        }
+
+        deprecatedEntries.add(
+          _ExistingEntry(
+            section: 'deprecated',
+            heading: _ensureDeprecatedHeading(entry.heading),
+            name: entry.name,
+            bodyLines: entry.bodyLines,
+            removedOn: entry.removedOn ?? _today(),
+          ),
+        );
+        deprecatedSeen.add(normalized);
+      }
+    }
+
+    if (!resetLegacyModuleHistory) {
+      for (final entry in existing.entries.where((entry) => entry.section == 'enums')) {
+        if (currentEnumNames.contains(entry.name)) {
+          continue;
+        }
+
+        final normalized = _normalizeHeading(entry.heading);
+        if (deprecatedSeen.contains(normalized)) {
+          continue;
+        }
+
+        deprecatedEntries.add(
+          _ExistingEntry(
+            section: 'deprecated',
+            heading: _ensureDeprecatedHeading(entry.heading),
+            name: entry.name,
+            bodyLines: entry.bodyLines,
+            removedOn: entry.removedOn ?? _today(),
+          ),
+        );
+        deprecatedSeen.add(normalized);
+      }
+    }
+
+    if (!resetLegacyModuleHistory) {
+      for (final entry in existing.entries.where((entry) => entry.section == 'type-aliases')) {
+        if (currentTypeAliasNames.contains(entry.name)) {
           continue;
         }
 
@@ -277,6 +391,33 @@ class MarkdownDocumentRenderer {
             classRenameMatches,
             classOwnerNames,
             classMemberRenameMatches,
+          );
+          break;
+        case 'interfaces':
+          _renderTypeScriptSymbols(
+            buffer,
+            headings['interfaces'] ?? 'Interfaces',
+            currentInterfaces,
+            exactInterfaceMatches,
+            kindLabel: 'Interfaces',
+          );
+          break;
+        case 'enums':
+          _renderTypeScriptSymbols(
+            buffer,
+            headings['enums'] ?? 'Enums',
+            currentEnums,
+            exactEnumMatches,
+            kindLabel: 'Enums',
+          );
+          break;
+        case 'type-aliases':
+          _renderTypeScriptSymbols(
+            buffer,
+            headings['type-aliases'] ?? 'Type Aliases',
+            currentTypeAliases,
+            exactTypeAliasMatches,
+            kindLabel: 'Type Aliases',
           );
           break;
         case 'functions':
@@ -392,6 +533,37 @@ class MarkdownDocumentRenderer {
       _writeManualBody(
         buffer,
         existingByName[symbol.name]?.bodyLines,
+      );
+      buffer.writeln();
+    }
+  }
+
+  void _renderTypeScriptSymbols(
+    StringBuffer buffer,
+    String heading,
+    List<DocumentationSymbol> symbols,
+    Map<String, _ExistingEntry> existingEntries, {
+    required String kindLabel,
+  }) {
+    buffer.writeln('## $heading');
+    buffer.writeln();
+
+    if (symbols.isEmpty) {
+      buffer.writeln('_No entries detected yet._');
+      buffer.writeln();
+      return;
+    }
+
+    for (final symbol in symbols) {
+      buffer.writeln(_symbolHeading(symbol));
+      final generatedBodyLines = _generatedTypeScriptBodyLines(symbol, kindLabel);
+      _writeGeneratedTypeScriptBody(buffer, symbol, kindLabel);
+      _writeManualBody(
+        buffer,
+        _stripGeneratedTypeScriptBody(
+          existingEntries[symbol.name]?.bodyLines ?? const <String>[],
+          generatedBodyLines,
+        ),
       );
       buffer.writeln();
     }
@@ -735,6 +907,110 @@ class MarkdownDocumentRenderer {
     }
   }
 
+  void _writeGeneratedTypeScriptBody(
+    StringBuffer buffer,
+    DocumentationSymbol symbol,
+    String kindLabel,
+  ) {
+    for (final line in _generatedTypeScriptBodyLines(symbol, kindLabel)) {
+      buffer.writeln(line);
+    }
+    buffer.writeln();
+  }
+
+  List<String> _generatedTypeScriptBodyLines(
+    DocumentationSymbol symbol,
+    String kindLabel,
+  ) {
+    final lines = <String>[];
+    switch (symbol.kind) {
+      case 'interface':
+        final extendsList = symbol.metadata['extends'];
+        if (extendsList is List && extendsList.isNotEmpty) {
+          lines.add('- Extends: `${extendsList.join(', ')}`');
+        }
+
+        final properties = symbol.children.where((child) => child.kind == 'field').toList();
+        final methods = symbol.children
+            .where((child) => child.kind == 'function' || child.kind == 'getter' || child.kind == 'setter')
+            .toList();
+
+        if (properties.isNotEmpty) {
+          lines.add('- Properties:');
+          for (final property in properties) {
+            lines.add('  - `${_symbolLabel(property)}`');
+          }
+        }
+        if (methods.isNotEmpty) {
+          lines.add('- Methods:');
+          for (final method in methods) {
+            lines.add('  - `${_symbolLabel(method)}`');
+          }
+        }
+        break;
+      case 'enum':
+        final isConst = symbol.metadata['isConst'] == true;
+        lines.add('- Const enum: `${isConst ? 'yes' : 'no'}`');
+        if (symbol.children.isNotEmpty) {
+          lines.add('- Members:');
+          for (final member in symbol.children) {
+            final value = member.metadata['value'];
+            final suffix = value != null && value.toString().isNotEmpty ? ' = `${value}`' : '';
+            lines.add('  - `${member.name}`$suffix');
+          }
+        }
+        break;
+      case 'type-alias':
+        final aliasType = symbol.metadata['type'];
+        if (aliasType is String && aliasType.isNotEmpty) {
+          lines.add('- Alias: `$aliasType`');
+        }
+        final typeParameters = symbol.metadata['typeParameters'];
+        if (typeParameters is List && typeParameters.isNotEmpty) {
+          lines.add('- Type parameters: `${typeParameters.join(', ')}`');
+        }
+        break;
+      default:
+        lines.add('- Type: `$kindLabel`');
+        break;
+    }
+    return lines;
+  }
+
+  List<String> _stripGeneratedTypeScriptBody(
+    List<String> bodyLines,
+    List<String> generatedLines,
+  ) {
+    if (bodyLines.isEmpty || generatedLines.isEmpty) {
+      return bodyLines;
+    }
+
+    var index = 0;
+    while (index < bodyLines.length && bodyLines[index].trim().isEmpty) {
+      index += 1;
+    }
+
+    var matches = true;
+    for (var i = 0; i < generatedLines.length; i++) {
+      final bodyIndex = index + i;
+      if (bodyIndex >= bodyLines.length || bodyLines[bodyIndex].trimRight() != generatedLines[i].trimRight()) {
+        matches = false;
+        break;
+      }
+    }
+
+    if (!matches) {
+      return bodyLines;
+    }
+
+    var remainderStart = index + generatedLines.length;
+    while (remainderStart < bodyLines.length && bodyLines[remainderStart].trim().isEmpty) {
+      remainderStart += 1;
+    }
+
+    return bodyLines.sublist(remainderStart);
+  }
+
   void _renderFunctions(
     StringBuffer buffer,
     String heading,
@@ -902,7 +1178,7 @@ class MarkdownDocumentRenderer {
       return;
     }
 
-    final filtered = _sanitizeManualBody(bodyLines);
+    final filtered = _manualBodySanitizer.sanitize(bodyLines);
 
     if (filtered.isEmpty) {
       return;
@@ -919,55 +1195,6 @@ class MarkdownDocumentRenderer {
     String originalName,
   ) {
     buffer.writeln('_Renamed from `$originalName`_');
-  }
-
-  List<String> _sanitizeManualBody(List<String> bodyLines) {
-    final filtered = <String>[];
-    var skippingGeneratedBlock = false;
-    var lastWasBlank = false;
-
-    for (final line in bodyLines) {
-      final trimmed = line.trim();
-
-      if (trimmed == '---') {
-        continue;
-      }
-
-      if (trimmed == '**Parameters**') {
-        skippingGeneratedBlock = true;
-        continue;
-      }
-
-      if (skippingGeneratedBlock) {
-        if (trimmed.isEmpty || trimmed.startsWith('-') || trimmed.startsWith('>')) {
-          continue;
-        }
-
-        skippingGeneratedBlock = false;
-      }
-
-      if (trimmed.startsWith('- Removed on `') || trimmed.startsWith('> Renamed from `')) {
-        continue;
-      }
-
-      if (trimmed.isEmpty) {
-        if (filtered.isEmpty || lastWasBlank) {
-          continue;
-        }
-        filtered.add('');
-        lastWasBlank = true;
-        continue;
-      }
-
-      lastWasBlank = false;
-      filtered.add(line.trimRight());
-    }
-
-    while (filtered.isNotEmpty && filtered.last.trim().isEmpty) {
-      filtered.removeLast();
-    }
-
-    return filtered;
   }
 
   Map<String, _ExistingEntry> _detectRenames({
@@ -1047,6 +1274,19 @@ class MarkdownDocumentRenderer {
     }
 
     return result;
+  }
+
+  ManualBodySanitizer _sanitizerFor(String language) {
+    final normalized = language.toLowerCase();
+    if (normalized == 'typescript' ||
+        normalized == 'ts' ||
+        normalized == 'tsx' ||
+        normalized == 'javascript' ||
+        normalized == 'js' ||
+        normalized == 'jsx') {
+      return const TypeScriptManualBodySanitizer();
+    }
+    return const DartManualBodySanitizer();
   }
 
   String _symbolHeading(DocumentationSymbol symbol) {
@@ -1490,6 +1730,9 @@ class _ExistingMarkdown {
       if (line.startsWith('### ') &&
           (currentSection == 'functions' ||
               currentSection == 'variables' ||
+              currentSection == 'interfaces' ||
+              currentSection == 'enums' ||
+              currentSection == 'type-aliases' ||
               currentSection == 'deprecated')) {
         flush();
         currentEntry = _ExistingEntry(
@@ -1568,6 +1811,15 @@ class _ExistingMarkdown {
     if (lower.startsWith('classes')) {
       return 'classes';
     }
+    if (lower.startsWith('interfaces')) {
+      return 'interfaces';
+    }
+    if (lower.startsWith('enums')) {
+      return 'enums';
+    }
+    if (lower.startsWith('type aliases') || lower.startsWith('type-aliases')) {
+      return 'type-aliases';
+    }
     if (lower.startsWith('dependencies')) {
       return 'dependencies';
     }
@@ -1579,9 +1831,16 @@ class _ExistingMarkdown {
 
   static String _extractNameFromHeading(String heading) {
     final normalized = heading.replaceFirst(RegExp(r'\s+⚠️ Deprecated$'), '');
-    final functionMatch = RegExp(r'^#+\s+.*?\b([A-Za-z_]\w*)\s*\(').firstMatch(normalized);
-    if (functionMatch != null) {
-      return functionMatch.group(1)!;
+    final stripped = normalized.replaceFirst(RegExp(r'^#+\s+'), '').trim();
+
+    final parenIndex = stripped.indexOf('(');
+    if (parenIndex != -1) {
+      var beforeParen = stripped.substring(0, parenIndex).trim();
+      beforeParen = beforeParen.replaceFirst(RegExp(r'<[^<>]*>$'), '').trim();
+      final tokens = beforeParen.split(RegExp(r'\s+'));
+      if (tokens.isNotEmpty) {
+        return tokens.last;
+      }
     }
 
     final variableMatch = RegExp(r'^#+\s+.*?\b([A-Za-z_]\w*)\s*$').firstMatch(normalized);
@@ -1589,7 +1848,7 @@ class _ExistingMarkdown {
       return variableMatch.group(1)!;
     }
 
-    return normalized;
+    return stripped;
   }
 
   static String _extractClassName(String heading) {

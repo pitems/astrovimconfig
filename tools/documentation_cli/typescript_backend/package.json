@@ -1,0 +1,13 @@
+{
+  "name": "documentation-typescript-backend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "analyze": "node src/index.js"
+  },
+  "dependencies": {
+    "typescript": "^5.6.3"
+  }
+}

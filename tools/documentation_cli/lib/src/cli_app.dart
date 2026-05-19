@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'index/documentation_index.dart';
 import 'models/documentation_request.dart';
 import 'models/documentation_result.dart';
 import 'orchestrator/documentation_orchestrator.dart';
@@ -79,9 +80,7 @@ class CliApplication {
     String? stdinText,
   }) async {
     // Render accepts either a JSON file or piped JSON from stdin.
-    final jsonText = parsed.value('input') != null
-        ? await File(parsed.value('input')!).readAsString()
-        : stdinText;
+    final jsonText = parsed.value('input') != null ? await File(parsed.value('input')!).readAsString() : stdinText;
 
     if (jsonText == null || jsonText.isEmpty) {
       throw const FormatException('render requires --input <file> or piped JSON on stdin');
@@ -102,12 +101,19 @@ class CliApplication {
     // Create is the main manual-test path: analyze source, then write markdown.
     final request = _buildRequest(parsed);
     final result = await orchestrator.analyze(request);
-    final existingMarkdown = await _readExistingFile(request.docPath);
+    final index = await DocumentationIndex.loadForSource(request.sourcePath);
+    final resolution = index.resolve(result);
+    final existingMarkdown = await _readExistingFile(resolution.sourceDocPath);
     final markdown = renderer.render(
       result,
       existingMarkdown: existingMarkdown,
     );
-    await _writeMaybe(parsed.value('output') ?? request.docPath, markdown);
+    await _writeMaybe(parsed.value('output') ?? resolution.targetDocPath, markdown);
+    if (resolution.sourceDocPath != resolution.targetDocPath) {
+      await _removeFileIfExists(resolution.sourceDocPath);
+    }
+    await index.upsert(resolution, result);
+    await index.save();
     return 0;
   }
 
@@ -172,8 +178,22 @@ class CliApplication {
       return normalized.substring(0, libIndex);
     }
 
-    final dir = File(sourcePath).parent;
-    return dir.path;
+    var dir = File(sourcePath).parent;
+    while (true) {
+      final packageJson = File('${dir.path}/package.json');
+      final tsconfig = File('${dir.path}/tsconfig.json');
+      if (packageJson.existsSync() || tsconfig.existsSync()) {
+        return dir.path;
+      }
+
+      final parent = dir.parent;
+      if (parent.path == dir.path) {
+        break;
+      }
+      dir = parent;
+    }
+
+    return File(sourcePath).parent.path;
   }
 
   Future<void> _writeMaybe(String? outputPath, String content) async {
@@ -197,6 +217,13 @@ class CliApplication {
     return file.readAsString();
   }
 
+  Future<void> _removeFileIfExists(String path) async {
+    final file = File(path);
+    if (await file.exists()) {
+      await file.delete();
+    }
+  }
+
   void _printHelp() {
     stdout.writeln('Documentation CLI');
     stdout.writeln('');
@@ -204,7 +231,8 @@ class CliApplication {
     stdout.writeln('  documentation_cli analyze --source <path> --doc-path <path> --filetype <type>');
     stdout.writeln('  documentation_cli render --input <json-file> [--output <path>]');
     stdout.writeln('  documentation_cli create --source <path> --doc-path <path> --filetype <type> [--output <path>]');
-    stdout.writeln('  documentation_cli blocks --kind <class|function|variable|constructor|notes|warning|examples> [--name <text>] [--signature <text>]');
+    stdout.writeln(
+        '  documentation_cli blocks --kind <class|function|variable|constructor|notes|warning|examples> [--name <text>] [--signature <text>]');
     stdout.writeln('');
     stdout.writeln('Options:');
     stdout.writeln('  --project-root <path>   Optional project root.');

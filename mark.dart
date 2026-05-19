@@ -15,6 +15,7 @@ class SampleController {
   }
 
   int leCounter = 0;
+  String label = 'sample';
   final ClassTest service;
 
   SampleController({required this.service});

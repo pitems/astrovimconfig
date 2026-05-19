@@ -1,0 +1,2442 @@
+{
+  "version": 1,
+  "documents": [
+    {
+      "doc_id": "doc_651ce79187af3424d9bfc",
+      "source_path": "/Users/pitems/.config/nvim/tools/documentation_cli/lib/src/cli_app.dart",
+      "doc_path": "/Users/pitems/.config/nvim/tools/documentation_cli/documentation/src/cli_app.md",
+      "layout": "module",
+      "fingerprint": "99238f26b9b42a52",
+      "snapshot": {
+        "layout": "module",
+        "symbols": [
+          {
+            "kind": "class",
+            "name": "CliApplication",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "CliApplication",
+                "signature": "CliApplication({DocumentationOrchestrator? orchestrator, MarkdownDocumentRenderer? renderer})",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "noteBlockRegistry",
+                "typeAnnotation": "NoteBlockRegistry",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "orchestrator",
+                "typeAnnotation": "DocumentationOrchestrator",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "renderer",
+                "typeAnnotation": "MarkdownDocumentRenderer",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_buildRequest",
+                "signature": "DocumentationRequest _buildRequest(_ParsedOptions parsed)",
+                "returnType": "DocumentationRequest",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_docPathForSource",
+                "signature": "String _docPathForSource(String sourcePath, {String? projectRoot})",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_guessProjectRoot",
+                "signature": "String _guessProjectRoot(String sourcePath)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_printHelp",
+                "signature": "void _printHelp()",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_readExistingFile",
+                "signature": "Future<String?> _readExistingFile(String path)",
+                "returnType": "Future<String?>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_removeFileIfExists",
+                "signature": "Future<void> _removeFileIfExists(String path)",
+                "returnType": "Future<void>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_runAnalyze",
+                "signature": "Future<int> _runAnalyze(_ParsedOptions parsed)",
+                "returnType": "Future<int>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_runBlocks",
+                "signature": "Future<int> _runBlocks(_ParsedOptions parsed)",
+                "returnType": "Future<int>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_runCreate",
+                "signature": "Future<int> _runCreate(_ParsedOptions parsed)",
+                "returnType": "Future<int>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_runRender",
+                "signature": "Future<int> _runRender(_ParsedOptions parsed, {String? stdinText})",
+                "returnType": "Future<int>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_writeMaybe",
+                "signature": "Future<void> _writeMaybe(String? outputPath, String content)",
+                "returnType": "Future<void>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "run",
+                "signature": "Future<int> run(List<String> arguments, {String? stdinText})",
+                "returnType": "Future<int>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "_ParsedOptions",
+            "visibility": "private",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "_ParsedOptions",
+                "signature": "_ParsedOptions(this.options)",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "options",
+                "typeAnnotation": "Map<String, String?>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "required",
+                "signature": "String required(String key)",
+                "returnType": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "value",
+                "signature": "String? value(String key)",
+                "returnType": "String?",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "name": "_parseOptions",
+            "signature": "_ParsedOptions _parseOptions(List<String> args)",
+            "returnType": "_ParsedOptions",
+            "visibility": "private",
+            "metadata": {
+              "isExternal": false,
+              "isGetter": false,
+              "isSetter": false
+            }
+          }
+        ]
+      },
+      "updated_at": "2026-05-14T22:18:17.022421Z"
+    },
+    {
+      "doc_id": "doc_651ce7918b3d88a5fa025",
+      "source_path": "/Users/pitems/.config/nvim/tools/documentation_cli/lib/src/renderers/markdown_document_renderer.dart",
+      "doc_path": "/Users/pitems/.config/nvim/tools/documentation_cli/documentation/src/renderers/markdown_document_renderer.md",
+      "layout": "module",
+      "fingerprint": "5eaddc5cd220da01",
+      "snapshot": {
+        "layout": "module",
+        "symbols": [
+          {
+            "kind": "class",
+            "name": "MarkdownDocumentRenderer",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "field",
+                "name": "_manualBodySanitizer",
+                "typeAnnotation": "ManualBodySanitizer",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_canonicalParameterFromModel",
+                "signature": "String _canonicalParameterFromModel(DocumentationParameter parameter)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_canonicalParameterFromText",
+                "signature": "String _canonicalParameterFromText(String text, {required bool named})",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_classMemberGroup",
+                "signature": "String _classMemberGroup(String kind)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_classMemberKey",
+                "signature": "String _classMemberKey(String className, String group, String name)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_classSimilarity",
+                "signature": "double _classSimilarity(DocumentationSymbol currentClass, _ExistingEntry candidate, List<_ExistingEntry> existingClassMembers)",
+                "returnType": "double",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_countSimilarity",
+                "signature": "double _countSimilarity(int a, int b)",
+                "returnType": "double",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_deprecatedDisplayHeading",
+                "signature": "String _deprecatedDisplayHeading(_ExistingEntry entry)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_detectClassRename",
+                "signature": "_ExistingEntry? _detectClassRename(DocumentationSymbol currentClass, List<_ExistingEntry> existingClasses, Map<String, List<_ExistingEntry>> existingClassMembersByClass, Set<String> exactClassNames)",
+                "returnType": "_ExistingEntry?",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_detectRenames",
+                "signature": "Map<String, _ExistingEntry> _detectRenames({required List<DocumentationSymbol> currentFunctions, required List<_ExistingEntry> existingEntries, required Set<String> exactFunctionNames, double minScore = 0.35})",
+                "returnType": "Map<String, _ExistingEntry>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_docPathForSourcePath",
+                "signature": "String _docPathForSourcePath(String sourcePath, String currentSourcePath)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_ensureDeprecatedHeading",
+                "signature": "String _ensureDeprecatedHeading(String heading)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_ensurePlaceholderDoc",
+                "signature": "void _ensurePlaceholderDoc(String docPath, String title, String sourcePath)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_fieldSignatureKeyFromHeading",
+                "signature": "String _fieldSignatureKeyFromHeading(String heading)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_fieldSignatureKeyFromSymbol",
+                "signature": "String _fieldSignatureKeyFromSymbol(DocumentationSymbol symbol)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_generatedTypeScriptBodyLines",
+                "signature": "List<String> _generatedTypeScriptBodyLines(DocumentationSymbol symbol, String kindLabel)",
+                "returnType": "List<String>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_groupWeight",
+                "signature": "double _groupWeight(int currentCount, int existingCount)",
+                "returnType": "double",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_guessProjectRoot",
+                "signature": "String _guessProjectRoot(String sourcePath)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_headingFor",
+                "signature": "String _headingFor(String section)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_isClassRenderableMember",
+                "signature": "bool _isClassRenderableMember(DocumentationSymbol symbol)",
+                "returnType": "bool",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_isInsideProject",
+                "signature": "bool _isInsideProject(String path, String projectRoot)",
+                "returnType": "bool",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_levenshtein",
+                "signature": "int _levenshtein(String a, String b)",
+                "returnType": "int",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_memberStructuralKeyFromHeading",
+                "signature": "String _memberStructuralKeyFromHeading(String heading)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_memberStructuralKeyFromSymbol",
+                "signature": "String _memberStructuralKeyFromSymbol(DocumentationSymbol symbol)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_nameSimilarity",
+                "signature": "double _nameSimilarity(String a, String b)",
+                "returnType": "double",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_normalizeHeading",
+                "signature": "String _normalizeHeading(String heading)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_normalizeType",
+                "signature": "String _normalizeType(String value)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_parseHeading",
+                "signature": "_ParsedHeading? _parseHeading(String heading)",
+                "returnType": "_ParsedHeading?",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderClassMemberGroup",
+                "signature": "void _renderClassMemberGroup(StringBuffer buffer, int headingLevel, String heading, String currentClassName, String ownerName, String group, List<DocumentationSymbol> members, _ExistingMarkdown existing, Map<String, _ExistingEntry> classMemberRenameMatches)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderClassTree",
+                "signature": "void _renderClassTree(StringBuffer buffer, DocumentationSymbol classSymbol, {required int level, required _ExistingMarkdown existing, required Map<String, _ExistingEntry> classRenameMatches, required Map<String, String> classOwnerNames, required Map<String, _ExistingEntry> classMemberRenameMatches})",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderClasses",
+                "signature": "void _renderClasses(StringBuffer buffer, String heading, List<DocumentationSymbol> classes, _ExistingMarkdown existing, Map<String, _ExistingEntry> classRenameMatches, Map<String, String> classOwnerNames, Map<String, _ExistingEntry> classMemberRenameMatches)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderDependencies",
+                "signature": "void _renderDependencies(StringBuffer buffer, String heading, List<Map<String, dynamic>> dependencies, List<DocumentationReference> references, String projectRoot, String sourcePath)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderDeprecated",
+                "signature": "void _renderDeprecated(StringBuffer buffer, String heading, List<_ExistingEntry> entries)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderFunctions",
+                "signature": "void _renderFunctions(StringBuffer buffer, String heading, List<DocumentationSymbol> functions, Map<String, _ExistingEntry> existingFunctions, Map<String, _ExistingEntry> renameMatches)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderNotes",
+                "signature": "void _renderNotes(StringBuffer buffer, String heading, List<String> warnings)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderOverview",
+                "signature": "void _renderOverview(StringBuffer buffer, DocumentationResult result, String heading)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderSymbols",
+                "signature": "void _renderSymbols(StringBuffer buffer, String heading, List<DocumentationSymbol> symbols, List<_ExistingEntry> existingEntries)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderTypeScriptSymbols",
+                "signature": "void _renderTypeScriptSymbols(StringBuffer buffer, String heading, List<DocumentationSymbol> symbols, Map<String, _ExistingEntry> existingEntries, {required String kindLabel})",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_renderVariables",
+                "signature": "void _renderVariables(StringBuffer buffer, String heading, List<DocumentationSymbol> variables, Map<String, _ExistingEntry> existingVariables)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_resolveReference",
+                "signature": "_ResolvedReference? _resolveReference(DocumentationReference reference, String sourcePath)",
+                "returnType": "_ResolvedReference?",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_sanitizerFor",
+                "signature": "ManualBodySanitizer _sanitizerFor(String language)",
+                "returnType": "ManualBodySanitizer",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_setSimilarity",
+                "signature": "double _setSimilarity(Set<String> a, Set<String> b)",
+                "returnType": "double",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_signatureKeyFromHeading",
+                "signature": "String _signatureKeyFromHeading(String heading)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_signatureKeyFromSymbol",
+                "signature": "String _signatureKeyFromSymbol(DocumentationSymbol symbol)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_splitParameters",
+                "signature": "List<String> _splitParameters(String parameters)",
+                "returnType": "List<String>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_stripGeneratedTypeScriptBody",
+                "signature": "List<String> _stripGeneratedTypeScriptBody(List<String> bodyLines, List<String> generatedLines)",
+                "returnType": "List<String>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_symbolHeading",
+                "signature": "String _symbolHeading(DocumentationSymbol symbol)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_symbolLabel",
+                "signature": "String _symbolLabel(DocumentationSymbol symbol)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_today",
+                "signature": "String _today()",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_writeGeneratedTypeScriptBody",
+                "signature": "void _writeGeneratedTypeScriptBody(StringBuffer buffer, DocumentationSymbol symbol, String kindLabel)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_writeManualBody",
+                "signature": "void _writeManualBody(StringBuffer buffer, List<String>? bodyLines)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_writeParameters",
+                "signature": "void _writeParameters(List<DocumentationParameter> parameters, StringBuffer buffer)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_writeRenameNote",
+                "signature": "void _writeRenameNote(StringBuffer buffer, String originalName)",
+                "returnType": "void",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "render",
+                "signature": "String render(DocumentationResult result, {String? existingMarkdown})",
+                "returnType": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "_DependencyLink",
+            "visibility": "private",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "_DependencyLink",
+                "signature": "const _DependencyLink({required this.name, required this.docPath, required this.exists})",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "docPath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "exists",
+                "typeAnnotation": "bool",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "name",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "_ExistingEntry",
+            "visibility": "private",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "_ExistingEntry",
+                "signature": "const _ExistingEntry({required this.section, required this.heading, required this.name, required this.bodyLines, this.removedOn, this.className, this.subgroup})",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "bodyLines",
+                "typeAnnotation": "List<String>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "className",
+                "typeAnnotation": "String?",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "heading",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "name",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "removedOn",
+                "typeAnnotation": "String?",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "section",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "subgroup",
+                "typeAnnotation": "String?",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "_ExistingMarkdown",
+            "visibility": "private",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "_ExistingMarkdown",
+                "signature": "const _ExistingMarkdown({required this.entries})",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "constructor",
+                "name": "empty",
+                "signature": "const _ExistingMarkdown.empty()",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "constructor",
+                "name": "parse",
+                "signature": "factory _ExistingMarkdown.parse(String? markdown)",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": true
+                }
+              },
+              {
+                "kind": "field",
+                "name": "entries",
+                "typeAnnotation": "List<_ExistingEntry>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_classGroupKey",
+                "signature": "String _classGroupKey(String heading)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_extractClassName",
+                "signature": "String _extractClassName(String heading)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_extractNameFromHeading",
+                "signature": "String _extractNameFromHeading(String heading)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_extractRemovedOn",
+                "signature": "String? _extractRemovedOn(List<String> bodyLines)",
+                "returnType": "String?",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_sectionKeyFromHeading",
+                "signature": "String _sectionKeyFromHeading(String heading)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "classEntry",
+                "signature": "_ExistingEntry? classEntry(String className)",
+                "returnType": "_ExistingEntry?",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "classMemberEntry",
+                "signature": "_ExistingEntry? classMemberEntry(String className, String group, String name)",
+                "returnType": "_ExistingEntry?",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "getter",
+                "name": "hasClassStructure",
+                "signature": "bool get hasClassStructure",
+                "returnType": "bool",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": true,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "_ParsedHeading",
+            "visibility": "private",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "_ParsedHeading",
+                "signature": "const _ParsedHeading({required this.returnType, required this.name, required this.parameters})",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "name",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "parameters",
+                "typeAnnotation": "List<String>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "returnType",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "_RenameCandidate",
+            "visibility": "private",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "_RenameCandidate",
+                "signature": "const _RenameCandidate({required this.currentName, required this.existing, required this.score})",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "currentName",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "existing",
+                "typeAnnotation": "_ExistingEntry",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "score",
+                "typeAnnotation": "double",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "_ResolvedReference",
+            "visibility": "private",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "_ResolvedReference",
+                "signature": "const _ResolvedReference({required this.name, required this.sourcePath, required this.docPath, required this.exists, required this.title})",
+                "visibility": "private",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "docPath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "exists",
+                "typeAnnotation": "bool",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "name",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "sourcePath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "title",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "updated_at": "2026-05-14T22:18:17.032822Z"
+    },
+    {
+      "doc_id": "doc_651ce7a212ef002bf6259",
+      "source_path": "/Users/pitems/.config/nvim/tools/documentation_cli/lib/src/index/documentation_index.dart",
+      "doc_path": "/Users/pitems/.config/nvim/tools/documentation_cli/documentation/src/index/documentation_index.md",
+      "layout": "module",
+      "fingerprint": "3965072daa238978",
+      "snapshot": {
+        "layout": "module",
+        "symbols": [
+          {
+            "kind": "class",
+            "name": "DocumentationIndex",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "DocumentationIndex",
+                "signature": "DocumentationIndex({required this.file, required this.documents})",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "documents",
+                "typeAnnotation": "List<DocumentationIndexEntry>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "file",
+                "typeAnnotation": "File",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_fingerprint",
+                "signature": "String _fingerprint(DocumentationResult result)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_guessProjectRoot",
+                "signature": "String _guessProjectRoot(String sourcePath)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_newDocId",
+                "signature": "String _newDocId()",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_orderedMap",
+                "signature": "Map<String, dynamic> _orderedMap(Map<String, dynamic> source)",
+                "returnType": "Map<String, dynamic>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_snapshotFor",
+                "signature": "Map<String, dynamic> _snapshotFor(DocumentationResult result)",
+                "returnType": "Map<String, dynamic>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_snapshotSimilarity",
+                "signature": "double _snapshotSimilarity(Set<String> a, Set<String> b)",
+                "returnType": "double",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_snapshotSymbol",
+                "signature": "Map<String, dynamic> _snapshotSymbol(DocumentationSymbol symbol)",
+                "returnType": "Map<String, dynamic>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_snapshotSymbols",
+                "signature": "List<Map<String, dynamic>> _snapshotSymbols(List<DocumentationSymbol> symbols)",
+                "returnType": "List<Map<String, dynamic>>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_snapshotTokensFromMap",
+                "signature": "Set<String> _snapshotTokensFromMap(Map<String, dynamic> snapshot)",
+                "returnType": "Set<String>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_snapshotTokensFromResult",
+                "signature": "Set<String> _snapshotTokensFromResult(DocumentationResult result)",
+                "returnType": "Set<String>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_snapshotTokensFromSymbol",
+                "signature": "Set<String> _snapshotTokensFromSymbol(Map<String, dynamic> symbol)",
+                "returnType": "Set<String>",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_stableHash",
+                "signature": "String _stableHash(String input)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "_symbolSortKey",
+                "signature": "String _symbolSortKey(DocumentationSymbol symbol)",
+                "returnType": "String",
+                "visibility": "private",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "loadForSource",
+                "signature": "Future<DocumentationIndex> loadForSource(String sourcePath)",
+                "returnType": "Future<DocumentationIndex>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": true
+                }
+              },
+              {
+                "kind": "function",
+                "name": "resolve",
+                "signature": "IndexResolution resolve(DocumentationResult result)",
+                "returnType": "IndexResolution",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "save",
+                "signature": "Future<void> save()",
+                "returnType": "Future<void>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "upsert",
+                "signature": "Future<void> upsert(IndexResolution resolution, DocumentationResult result)",
+                "returnType": "Future<void>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": true,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "DocumentationIndexEntry",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "DocumentationIndexEntry",
+                "signature": "const DocumentationIndexEntry({required this.docId, required this.sourcePath, required this.docPath, required this.layout, required this.fingerprint, required this.snapshot, required this.updatedAt})",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "constructor",
+                "name": "fromJson",
+                "signature": "factory DocumentationIndexEntry.fromJson(Map<String, dynamic> json)",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": true
+                }
+              },
+              {
+                "kind": "field",
+                "name": "docId",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "docPath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "fingerprint",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "layout",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "snapshot",
+                "typeAnnotation": "Map<String, dynamic>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "sourcePath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "updatedAt",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "toJson",
+                "signature": "Map<String, dynamic> toJson()",
+                "returnType": "Map<String, dynamic>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "IndexResolution",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "IndexResolution",
+                "signature": "const IndexResolution({required this.docId, required this.sourcePath, required this.targetDocPath, required this.sourceDocPath, required this.layout, required this.fingerprint, required this.snapshot, required this.sourcePathWasRenamed})",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "docId",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "fingerprint",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "layout",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "snapshot",
+                "typeAnnotation": "Map<String, dynamic>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "sourceDocPath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "sourcePath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "sourcePathWasRenamed",
+                "typeAnnotation": "bool",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "targetDocPath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "updated_at": "2026-05-14T22:18:34.367667Z"
+    },
+    {
+      "doc_id": "doc_651ce7a224c19f6c20b88",
+      "source_path": "/Users/pitems/.config/nvim/tools/documentation_cli/lib/src/note_blocks/note_block_registry.dart",
+      "doc_path": "/Users/pitems/.config/nvim/tools/documentation_cli/documentation/src/note_blocks/note_block_registry.md",
+      "layout": "module",
+      "fingerprint": "d518958c192f188e",
+      "snapshot": {
+        "layout": "module",
+        "symbols": [
+          {
+            "kind": "class",
+            "name": "NoteBlockRegistry",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "NoteBlockRegistry",
+                "signature": "const NoteBlockRegistry()",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "create",
+                "signature": "NoteBlockTemplate create({required String kind, String? name, String? signature, String? intro})",
+                "returnType": "NoteBlockTemplate",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "updated_at": "2026-05-14T22:18:34.442960Z"
+    }
+  ]
+}rtManualBodySanitizer",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false,
+              "superclass": "BaseManualBodySanitizer"
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "DartManualBodySanitizer",
+                "signature": "const DartManualBodySanitizer()",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "ManualBodySanitizer",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": true
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "ManualBodySanitizer",
+                "signature": "const ManualBodySanitizer()",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "sanitize",
+                "signature": "List<String> sanitize(List<String> bodyLines)",
+                "returnType": "List<String>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": true,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "class",
+            "name": "TypeScriptManualBodySanitizer",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false,
+              "superclass": "BaseManualBodySanitizer"
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "TypeScriptManualBodySanitizer",
+                "signature": "const TypeScriptManualBodySanitizer()",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "sanitize",
+                "signature": "List<String> sanitize(List<String> bodyLines)",
+                "returnType": "List<String>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "updated_at": "2026-05-14T22:18:34.443350Z"
+    }
+  ]
+}        "metadata": {
+                  "isConst": true,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "constructor",
+                "name": "fromJson",
+                "signature": "factory DocumentationResult.fromJson(Map<String, dynamic> json)",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": true
+                }
+              },
+              {
+                "kind": "field",
+                "name": "dependencies",
+                "typeAnnotation": "List<Map<String, dynamic>>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "docPath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "language",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "metadata",
+                "typeAnnotation": "DocumentationMetadata",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "projectRoot",
+                "typeAnnotation": "String?",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "references",
+                "typeAnnotation": "List<DocumentationReference>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "sourcePath",
+                "typeAnnotation": "String",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "symbols",
+                "typeAnnotation": "List<DocumentationSymbol>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "template",
+                "typeAnnotation": "DocumentationTemplate",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "warnings",
+                "typeAnnotation": "List<String>",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "toJson",
+                "signature": "Map<String, dynamic> toJson()",
+                "returnType": "Map<String, dynamic>",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "updated_at": "2026-05-14T22:18:34.443017Z"
+    }
+  ]
+}

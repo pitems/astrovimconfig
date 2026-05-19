@@ -5,7 +5,7 @@
 - Language: `dart`
 - Source: `/Users/pitems/.config/nvim/mark.dart`
 - Documentation: `/Users/pitems/.config/nvim/documentation/mark.md`
-- Generated: `2026-05-13T05:49:50.634134Z`
+- Generated: `2026-05-13T15:33:29.262704Z`
 
 ## Classes
 
@@ -16,6 +16,8 @@
 ##### static SampleController? _instance
 
 ##### int leCounter
+
+##### String label
 
 ##### final ClassTest service
 

@@ -4,8 +4,23 @@ local function cli_root()
   return vim.fn.stdpath("config") .. "/tools/documentation_cli"
 end
 
+local function cli_binary()
+  local binary = cli_root() .. "/build/documentation_cli_v1"
+  if vim.fn.executable(binary) == 1 then
+    return binary
+  end
+
+  return nil
+end
+
 local function run_cli(args)
-  local command = { "dart", "run", "bin/documentation_cli.dart" }
+  local command = {}
+  local binary = cli_binary()
+  if binary then
+    command = { binary }
+  else
+    command = { "dart", "run", "bin/documentation_cli.dart" }
+  end
   vim.list_extend(command, args)
 
   if vim.system then

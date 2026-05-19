@@ -1,6 +1,6 @@
 import '../analyzers/dart/dart_analyzer.dart';
 import '../analyzers/document_analyzer.dart';
-import '../analyzers/typescript_analyzer.dart';
+import '../analyzers/typescript/typescript_analyzer.dart';
 
 class AnalyzerRegistry {
   AnalyzerRegistry({Iterable<DocumentAnalyzer>? analyzers})

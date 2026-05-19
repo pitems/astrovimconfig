@@ -1,0 +1,213 @@
+{
+  "version": 1,
+  "documents": [
+    {
+      "doc_id": "doc_651b5544f13ac6de9d894",
+      "source_path": "/Users/pitems/.config/nvim/tools/documentation_cli/typescript_backend/examples/sample.ts",
+      "doc_path": "/Users/pitems/.config/nvim/tools/documentation_cli/typescript_backend/documentation/examples/sample.md",
+      "layout": "controller",
+      "fingerprint": "c9a32dab112134c0",
+      "snapshot": {
+        "layout": "controller",
+        "symbols": [
+          {
+            "kind": "class",
+            "name": "DemoController",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": false
+            },
+            "children": [
+              {
+                "kind": "constructor",
+                "name": "DemoController",
+                "signature": "DemoController(name: string, mode: MenuKind = MenuKind.primary)",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFactory": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "label",
+                "signature": "readonly label: string",
+                "typeAnnotation": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": true,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "value",
+                "signature": "value: number",
+                "typeAnnotation": "number",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "run",
+                "signature": "string run(input: string, options?: MenuMap<MenuItem>)",
+                "returnType": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": false,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "enum",
+            "name": "MenuKind",
+            "visibility": "public",
+            "metadata": {
+              "isConst": true,
+              "memberCount": 2
+            },
+            "children": [
+              {
+                "kind": "enum-member",
+                "name": "primary",
+                "visibility": "public",
+                "metadata": {
+                  "value": "'primary'"
+                }
+              },
+              {
+                "kind": "enum-member",
+                "name": "secondary",
+                "visibility": "public",
+                "metadata": {
+                  "value": "'secondary'"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "name": "helper",
+            "signature": "string helper<T extends MenuTitle>(input: T)",
+            "returnType": "string",
+            "visibility": "public",
+            "metadata": {
+              "isAsync": false,
+              "isExternal": false,
+              "isGetter": false,
+              "isSetter": false
+            }
+          },
+          {
+            "kind": "interface",
+            "name": "MenuItem",
+            "visibility": "public",
+            "metadata": {
+              "extends": [
+                "NamedItem"
+              ],
+              "isAbstract": true
+            },
+            "children": [
+              {
+                "kind": "field",
+                "name": "icon",
+                "signature": "icon?: string",
+                "typeAnnotation": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "field",
+                "name": "title",
+                "signature": "title: string",
+                "typeAnnotation": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              },
+              {
+                "kind": "function",
+                "name": "render",
+                "signature": "string render()",
+                "returnType": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isAbstract": true,
+                  "isAsync": false,
+                  "isGetter": false,
+                  "isSetter": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "interface",
+            "name": "NamedItem",
+            "visibility": "public",
+            "metadata": {
+              "isAbstract": true
+            },
+            "children": [
+              {
+                "kind": "field",
+                "name": "name",
+                "signature": "name: string",
+                "typeAnnotation": "string",
+                "visibility": "public",
+                "metadata": {
+                  "isConst": false,
+                  "isFinal": false,
+                  "isLate": false,
+                  "isStatic": false
+                }
+              }
+            ]
+          },
+          {
+            "kind": "type-alias",
+            "name": "MenuMap",
+            "visibility": "public",
+            "metadata": {
+              "type": "Record<string, T>",
+              "typeParameters": [
+                "T"
+              ]
+            }
+          },
+          {
+            "kind": "type-alias",
+            "name": "MenuTitle",
+            "visibility": "public",
+            "metadata": {
+              "type": "string | number"
+            }
+          }
+        ]
+      },
+      "updated_at": "2026-05-13T16:24:39.249Z"
+    }
+  ]
+}
