@@ -10,6 +10,19 @@ return {
 
     config = function()
       local flutter_tools = require "flutter-tools"
+      local flutter_config = require "flutter-tools.config"
+
+      -- Disable flutter-tools' legacy renderer before it registers its
+      -- autocmds. Neovim 0.12 handles document colors natively below.
+      flutter_config.lsp.color.enabled = false
+
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("flutter_document_colors", { clear = true }),
+        pattern = "*.dart",
+        callback = function(args)
+          if vim.lsp.document_color then vim.lsp.document_color.enable(true, { bufnr = args.buf }) end
+        end,
+      })
 
       flutter_tools.setup {
         fvm = true,
@@ -64,12 +77,6 @@ return {
 
           -- ❗ DO NOT override capabilities manually
           -- The internal merge in new flutter-tools is correct.
-
-          color = {
-            enabled = true,
-            virtual_text = true,
-            virtual_text_str = "■",
-          },
 
           settings = {
             lineLength = 120,

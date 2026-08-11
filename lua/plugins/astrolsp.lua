@@ -109,17 +109,15 @@ return {
     },
     -- customize how language servers are attached
     handlers = {
-      -- a function without a key is simply the default handler, functions take two parameters, the server name and the configured options table for that server
-      -- function(server, opts) require("lspconfig")[server].setup(opts) end
-
-      -- the key is the server that is being setup with `lspconfig`
-      -- rust_analyzer = false, -- setting a handler to false will disable the set up of that language server
-      -- pyright = function(_, opts) require("lspconfig").pyright.setup(opts) end -- or a custom handler function can be passed
-      ts_ls = function(_, opts)
-        require("lspconfig").ts_ls.setup(vue.ts_ls(opts))
+      -- AstroNvim v6 passes only the server name to handlers and uses
+      -- Neovim's native LSP configuration API.
+      ts_ls = function(server)
+        vim.lsp.config(server, vue.ts_ls {})
+        vim.lsp.enable(server)
       end,
-      vue_ls = function(_, opts)
-        require("lspconfig").vue_ls.setup(vue.vue_ls(opts))
+      vue_ls = function(server)
+        vim.lsp.config(server, vue.vue_ls {})
+        vim.lsp.enable(server)
       end,
     },
     -- Configure buffer local auto commands to add when attaching a language server
