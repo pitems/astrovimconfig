@@ -31,9 +31,8 @@ function M.apply(filetype)
     return
   end
 
-  -- Keep the buffer-local width and visual guide aligned for formatter testing.
+  -- Keep the buffer-local width for formatter testing without drawing a guide.
   vim.bo.textwidth = width
-  vim.wo.colorcolumn = tostring(width)
   if filetype == "markdown" or filetype == "md" then
     vim.notify(string.format("Markdown wrap width set to %d", width), vim.log.levels.INFO)
   end

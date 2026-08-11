@@ -6,6 +6,16 @@ end
 -- This is just pure lua so anything that doesn't
 -- fit in the normal config locations above can go here
 --
+-- Reapply the selected colorscheme after all startup plugins have initialized.
+-- Some UI plugins load their default highlights after AstroUI selects the
+-- colorscheme during setup.
+vim.api.nvim_create_autocmd("VimEnter", {
+  once = true,
+  callback = function()
+    require("user.theme-hub").reapply()
+  end,
+})
+
 -- local ok, resession = pcall(require, "resession")
 -- if ok then
 --   resession.setup {

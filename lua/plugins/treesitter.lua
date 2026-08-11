@@ -13,7 +13,6 @@ return {
       require("nvim-treesitter").setup()
 
       local query = require "vim.treesitter.query"
-      local nvim_treesitter_configs = require "nvim-treesitter.configs"
       local directive_opts = vim.fn.has "nvim-0.10" == 1 and { force = true, all = false } or true
 
       local function capture_node(match, capture_id)
@@ -80,6 +79,7 @@ return {
         "bash",
         "c",
         "css",
+        "dart",
         "html",
         "javascript",
         "lua",
@@ -87,6 +87,7 @@ return {
         "markdown_inline",
         "python",
         "query",
+        "rust",
         "typescript",
         "vim",
         "vimdoc",
@@ -96,20 +97,22 @@ return {
         "bash",
         "c",
         "css",
+        "dart",
         "html",
         "javascript",
         "python",
         "query",
+        "rust",
         "typescript",
         "vim",
         "vimdoc",
         "vue",
       }
 
-      nvim_treesitter_configs.setup {
-        ensure_installed = install_langs,
-        auto_install = false,
-      }
+      -- The `main` branch uses the new installation API. The old
+      -- `nvim-treesitter.configs` module belongs to the archived `master`
+      -- branch and is not available here.
+      require("nvim-treesitter").install(install_langs)
 
       vim.api.nvim_create_autocmd("FileType", {
         pattern = ft_langs,
@@ -117,7 +120,7 @@ return {
           pcall(vim.treesitter.start, args.buf)
           vim.opt_local.foldmethod = "expr"
           vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-          vim.bo[args.buf].indentexpr = "nvim_treesitter#indent()"
+          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
       })
     end,

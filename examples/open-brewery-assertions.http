@@ -1,0 +1,91 @@
+# Open Brewery DB smoke tests
+#
+# Run one test with <leader>As, or run the whole collection with <leader>Aa.
+# Open Kulala's Report pane after running to see passed and failed assertions.
+#
+# These use Kulala's JetBrains-compatible JavaScript response-handler API:
+# client.test(name, function() {}) and client.assert(condition, message).
+@baseUrl = https://api.openbrewerydb.org/v1
+@city = Austin
+@breweryId = de0da44e-8a09-4e8d-8b3a-aca03b39cc23
+@search = blue%20moon
+
+### List breweries
+# @kulala-expect-status-code 200
+# @name list_breweries
+GET {{baseUrl}}/breweries?by_city={{city}}&per_page=5
+Accept: application/json
+
+> {%
+client.test("List returns a valid brewery collection", function() {
+  client.assert(response.status === 200, "HTTP status is not 200");
+  client.assert(Array.isArray(response.body), "Response is not an array");
+  client.assert(response.body.length <= 5, "per_page limit was not respected");
+
+  if (response.body.length > 0) {
+    client.assert(typeof response.body[0].id === "string", "First brewery has no id");
+    client.assert(typeof response.body[0].name === "string", "First brewery has no name");
+  }
+});
+%}
+
+### Search breweries
+# @kulala-expect-status-code 200
+# @name search_breweries
+GET {{baseUrl}}/breweries/search?query={{search}}&per_page=5
+Accept: application/json
+
+> {%
+client.test("Search returns a valid result collection", function() {
+  client.assert(response.status === 200, "HTTP status is not 200");
+  client.assert(Array.isArray(response.body), "Search response is not an array");
+
+  if (response.body.length > 0) {
+    client.assert(typeof response.body[0].name === "string", "Search result has no name");
+    client.assert(typeof response.body[0].brewery_type === "string", "Search result has no brewery type");
+  }
+});
+%}
+
+### Get one brewery
+# @kulala-expect-status-code 200
+# @name get_brewery
+GET {{baseUrl}}/breweries/{{breweryId}}
+Accept: application/json
+
+> {%
+client.test("Single brewery has the expected shape", function() {
+  client.assert(response.status === 200, "HTTP status is not 200");
+  client.assert(typeof response.body.id === "string", "Brewery has no id");
+  client.assert(typeof response.body.name === "string", "Brewery has no name");
+  client.assert(typeof response.body.brewery_type === "string", "Brewery has no type");
+  client.assert(typeof response.body.country === "string", "Brewery has no country");
+});
+%}
+
+### Get random breweries
+# @kulala-expect-status-code 200
+# @name random_breweries
+GET {{baseUrl}}/breweries/random?size=3
+Accept: application/json
+
+> {%
+client.test("Random endpoint honors the requested size", function() {
+  client.assert(response.status === 200, "HTTP status is not 200");
+  client.assert(Array.isArray(response.body), "Random response is not an array");
+  client.assert(response.body.length === 3, "Random endpoint did not return three breweries");
+});
+%}
+
+### Missing brewery returns a 404
+# This is also an assertion: the request should fail with exactly 404.
+# @kulala-expect-status-code 404
+# @name missing_brewery
+GET {{baseUrl}}/breweries/does-not-exist-hopefully
+Accept: application/json
+
+> {%
+client.test("Missing brewery returns 404", function() {
+  client.assert(response.status === 404, "Missing brewery did not return 404");
+});
+%}

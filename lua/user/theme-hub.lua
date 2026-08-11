@@ -1,4 +1,5 @@
 local M = {}
+local theme_config = require "user.theme"
 
 M.themes = {
   "cyberdream",
@@ -9,6 +10,7 @@ M.themes = {
   "rose-pine",
   "gruvbox",
   "terafox",
+  "luna",
   -- zenbones family
   "zenbones",
   "neobones",
@@ -37,6 +39,9 @@ function M.apply(theme)
   }
   vim.o.background = light[theme] and "light" or "dark"
 
+  -- Keep the in-memory configuration synchronized with the persisted one.
+  theme_config.colorscheme = theme
+
   -- apply theme
   vim.cmd.colorscheme(theme)
 
@@ -47,6 +52,12 @@ return M
 ]]):format(theme)
 
   vim.fn.writefile(vim.split(content, "\n"), theme_file)
+end
+
+function M.reapply()
+  local theme = theme_config.colorscheme
+  vim.o.background = vim.tbl_contains({ "catppuccin-latte", "zenwritten", "forestbones" }, theme) and "light" or "dark"
+  vim.cmd.colorscheme(theme)
 end
 
 function M.pick()

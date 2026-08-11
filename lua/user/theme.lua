@@ -2,20 +2,17 @@
 
 local M = {}
 
-M.colorscheme = "cyberdream"
+M.colorscheme = "luna"
 
 -- Reset (mandatory)
-vim.cmd("highlight clear")
-if vim.fn.exists("syntax_on") == 1 then
-  vim.cmd("syntax reset")
-end
+vim.cmd "highlight clear"
+if vim.fn.exists "syntax_on" == 1 then vim.cmd "syntax reset" end
 
 -- Background preferences PER THEME
 local light_themes = {
   ["catppuccin-latte"] = true,
   ["zenwritten"] = true,
-    ["forestbones"] = true,
-
+  ["forestbones"] = true,
 }
 
 local dark_themes = {
@@ -26,6 +23,7 @@ local dark_themes = {
   ["nordbones"] = true,
   ["tokyobones"] = true,
   ["kanagawabones"] = true,
+  ["luna"] = true,
 }
 
 if light_themes[M.colorscheme] then

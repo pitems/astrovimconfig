@@ -9,6 +9,7 @@ return {
     harpoon:setup()
 
     wk.add({
+      { "<leader>H", group = "Harpoon" },
       { "<leader>Ha", function() harpoon:list():add() end, desc = "Add file to Harpoon" },
       { "<leader>Hd", function() harpoon:list():remove() end, desc = "Remove file from Harpoon" },
       { "<leader>Hc", function() harpoon:list():clear() end, desc = "Clear Harpoon list" },

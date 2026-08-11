@@ -1,0 +1,48 @@
+# Open Brewery DB playground
+#
+# In Kulala:
+#   <leader>As  Send the request under the cursor
+#   <leader>Aa  Send every request in this file
+#   <leader>Ar  Replay the last request
+#
+# Change these values and run the request again.
+@baseUrl = https://api.openbrewerydb.org/v1
+@city = Austin
+@breweryId = de0da44e-8a09-4e8d-8b3a-aca03b39cc23
+@search = blue%20moon
+
+### List breweries
+# The API defaults to 50 results; per_page keeps this response small.
+# @name list_breweries
+GET {{baseUrl}}/breweries?by_city={{city}}&per_page=5
+Accept: application/json
+
+### Search by brewery name
+# Search is partial and case-insensitive.
+# @name search_breweries
+GET {{baseUrl}}/breweries/search?query={{search}}&per_page=5
+Accept: application/json
+
+### Get one brewery
+# Try replacing @breweryId with an id from the list request.
+# @name get_brewery
+GET {{baseUrl}}/breweries/{{breweryId}}
+Accept: application/json
+
+### Get random breweries
+# The API accepts size=1..50.
+# @name random_breweries
+GET {{baseUrl}}/breweries/random?size=3
+Accept: application/json
+
+### Filter by type and state
+# by_state expects the full state name, not an abbreviation.
+# @name filter_breweries
+GET {{baseUrl}}/breweries?by_type=micro&by_state=Texas&per_page=5
+Accept: application/json
+
+### Metadata
+# Returns a count for the matching filter rather than brewery records.
+# @name brewery_metadata
+GET {{baseUrl}}/breweries/meta?by_country=United_States&by_type=micro
+Accept: application/json

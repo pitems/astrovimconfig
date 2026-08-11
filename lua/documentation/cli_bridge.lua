@@ -37,6 +37,35 @@ local function run_cli(args)
   return code, output, ""
 end
 
+function M.create_documentation(opts)
+  opts = opts or {}
+
+  local args = {
+    "create",
+    "--source",
+    opts.source,
+    "--doc-path",
+    opts.doc_path,
+    "--filetype",
+    opts.filetype,
+  }
+
+  if opts.project_root and opts.project_root ~= "" then
+    vim.list_extend(args, { "--project-root", opts.project_root })
+  end
+
+  if opts.output and opts.output ~= "" then
+    vim.list_extend(args, { "--output", opts.output })
+  end
+
+  return run_cli(args)
+end
+
+function M.render_documentation(opts)
+  opts = opts or {}
+  return M.create_documentation(vim.tbl_extend("force", opts, { output = "-" }))
+end
+
 function M.render_block(kind, opts)
   opts = opts or {}
 

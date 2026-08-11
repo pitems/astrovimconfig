@@ -71,6 +71,18 @@ return {
     end,
   },
   { "Mofiqul/dracula.nvim" },
+  {
+    "pitems/luna.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      plugins = {
+        all = true,
+        auto = true,
+      },
+    },
+    config = function(_, opts) require("luna").setup(opts) end,
+  },
   -- {
   --   "zenbones-theme/zenbones.nvim",
   --   -- Optionally install Lush. Allows for more configuration or extending the colorscheme

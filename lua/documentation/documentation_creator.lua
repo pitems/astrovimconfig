@@ -1,104 +1,121 @@
-local parsers = require("documentation.doc_parsers.init")
-local utils  = require('documentation.documents_utils')
-local renderer = require('documentation.config.renderer')
-local preview_renderer = require('documentation.preview_renderer')
 local M = {}
+
+local function doc_path_for(source_path)
+  local project_root = vim.fn.getcwd()
+  local rel = source_path:gsub(project_root .. "/", "")
+  return project_root
+    .. "/documentation/"
+    .. rel:gsub("%.%w+$", ".md")
+end
+
+local function write_doc_file(doc_path, lines)
+  vim.fn.writefile(lines, doc_path)
+
+  local doc_buf = vim.fn.bufnr(doc_path)
+  if doc_buf ~= -1 and vim.api.nvim_buf_is_loaded(doc_buf) then
+    vim.api.nvim_buf_set_lines(doc_buf, 0, -1, false, lines)
+    vim.bo[doc_buf].modified = false
+  end
+end
+
+local function read_file_lines(path)
+  if not vim.loop.fs_stat(path) then
+    return nil
+  end
+  return vim.fn.readfile(path)
+end
+
+local function join_lines(lines)
+  return table.concat(lines, "\n")
+end
+
+local function normalize_text(text)
+  return (text:gsub("\r?\n+$", ""))
+end
+
+local function render_documentation(source_path, doc_path, filetype)
+  local project_root = vim.fn.getcwd()
+  local code, stdout, stderr = require("documentation.cli_bridge").render_documentation({
+    source = source_path,
+    doc_path = doc_path,
+    filetype = filetype,
+    project_root = project_root,
+  })
+
+  if code ~= 0 then
+    local message = stderr ~= "" and stderr or stdout ~= "" and stdout or "Failed to render documentation"
+    error(message)
+  end
+
+  return stdout
+end
+
+function M.sync_from_source_buffer(source_buf)
+  local source_path = vim.api.nvim_buf_get_name(source_buf)
+  if source_path == "" then return end
+
+  local doc_path = doc_path_for(source_path)
+  local current = read_file_lines(doc_path)
+  if not current then
+    return
+  end
+
+  local filetype = vim.bo[source_buf].filetype
+  local rendered = render_documentation(source_path, doc_path, filetype)
+  if rendered == "" then
+    return
+  end
+
+  local normalized = normalize_text(rendered)
+  local updated = vim.split(normalized, "\n", { plain = true })
+  if normalized == join_lines(current) then
+    return
+  end
+
+  write_doc_file(doc_path, updated)
+end
 
 function M.open_or_create_doc()
   local source_buf = vim.api.nvim_get_current_buf()
   local source_path = vim.api.nvim_buf_get_name(source_buf)
   if source_path == "" then return end
 
-  local project_root = vim.fn.getcwd()
-  local rel = source_path:gsub(project_root .. "/", "")
-  local doc_path = project_root
-    .. "/documentation/"
-    .. rel:gsub("%.%w+$", ".md")
+  local doc_path = doc_path_for(source_path)
 
   local filetype = vim.bo[source_buf].filetype
-  local parser = parsers.get(filetype)
 
-  local source_lines =
-    vim.api.nvim_buf_get_lines(source_buf, 0, -1, false)
-
-  -- 📄 DOC EXISTS
   if vim.loop.fs_stat(doc_path) then
-    vim.cmd("edit " .. doc_path)
-
-    if not parser then return end
-
-    local md_lines =
-      vim.api.nvim_buf_get_lines(0, 0, -1, false)
-
-    local documented = utils.extract_documented_functions(md_lines)
-    local parsed = parser.parse(source_lines)
-    local functions = parsed.functions
-
-    local rename = require("documentation.rename")
-
-    local renames = rename.detect_renames(source_path)
-    
-
-    local diff = utils.compute_diff(documented,functions,renames)
-    if #diff.new == 0 and #diff.removed == 0 and #diff.renamed == 0 then
+    local current = read_file_lines(doc_path)
+    if not current then
+      vim.cmd("edit " .. vim.fn.fnameescape(doc_path))
       return
     end
-    
-    local modalpreview = require('documentation.ui.changes_preview')
-    modalpreview.open(diff,function()
-        -- Work on md_lines ONLY
-        local updated = vim.deepcopy(md_lines)
-        -- 1️⃣ Add new functions
-        if #diff.new > 0 then
-          local blocks = renderer.render_section('functions',diff.new)
-          for _, line in ipairs(blocks) do
-            table.insert(updated, line)
-          end
-        end
 
-        if #diff.renamed > 0 then
-          utils.apply_renames_inline(updated, diff.renamed)
-        end
+    local rendered = render_documentation(source_path, doc_path, filetype)
+    local updated = vim.split(normalize_text(rendered), "\n", { plain = true })
 
-        -- 2️⃣ Mark deprecated
-        if #diff.removed > 0 then
-          utils.mark_deprecated_inline(updated, diff.removed,diff.renamed)
-        end
+    if normalize_text(rendered) ~= join_lines(current) then
+      vim.notify(
+        "Documentation changed for " .. vim.fn.fnamemodify(source_path, ":t") .. ". Updating and opening the refreshed doc.",
+        vim.log.levels.INFO
+      )
+      write_doc_file(doc_path, updated)
+    end
 
-        -- 🔥 Single write, no clobbering
-        vim.api.nvim_buf_set_lines(0, 0, -1, false, updated)
-      end
-    )
+    vim.cmd("edit " .. vim.fn.fnameescape(doc_path))
     return
   end
 
-  -- 🆕 DOC DOES NOT EXIST
-  vim.ui.select(
-    { "Yes", "No" },
-    { prompt = "Create documentation file?" },
-    function(choice)
-      if choice ~= "Yes" then return end
+  local choice = vim.fn.confirm("Create documentation file?", "&Yes\n&No", 2)
+  if choice ~= 1 then
+    return
+  end
 
-      local md_lines
-
-      if parser then
-        local functions = parser.parse(source_lines)
-        md_lines = renderer.build(rel, functions)
-      else
-        md_lines = {
-          "# Documentation: " .. rel,
-          "",
-          "## Overview",
-          "",
-          "## Notes",
-        }
-      end
-
-      vim.fn.mkdir(vim.fn.fnamemodify(doc_path, ":h"), "p")
-      vim.cmd("edit " .. doc_path)
-      vim.api.nvim_buf_set_lines(0, 0, -1, false, md_lines)
-    end
-  )
+  vim.fn.mkdir(vim.fn.fnamemodify(doc_path, ":h"), "p")
+  local rendered = render_documentation(source_path, doc_path, filetype)
+  local md_lines = vim.split(normalize_text(rendered), "\n", { plain = true })
+  write_doc_file(doc_path, md_lines)
+  vim.cmd("edit " .. vim.fn.fnameescape(doc_path))
 end
 
 return M
