@@ -49,6 +49,7 @@ return {
     local function blend_bufferline_fill()
       vim.api.nvim_set_hl(0, "BufferLineFill", { bg = bufferline_gray })
       vim.api.nvim_set_hl(0, "TabLineFill", { bg = bufferline_gray })
+      vim.api.nvim_set_hl(0, "BufferLineTabClose", { fg = "#e08585", bg = bufferline_gray })
     end
 
     blend_selected_buffers()
