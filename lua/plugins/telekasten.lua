@@ -3,14 +3,14 @@ return {
   dependencies = { "nvim-telescope/telescope.nvim" },
   cmd = { "Telekasten" },
   keys = {
-    { "<leader>zn", "<cmd>Telekasten new_note<CR>", desc = "New Note" },
-    { "<leader>zz", "<cmd>Telekasten panel<CR>", desc = "Telekasten Panel" },
-    { "<leader>zf", "<cmd>Telekasten find_notes<CR>", desc = "Find Notes" },
-    { "<leader>zg", "<cmd>Telekasten search_notes<CR>", desc = "Search Notes (Grep)" },
-    { "<leader>zd", "<cmd>Telekasten goto_today<CR>", desc = "Today’s Note" },
-    { "<leader>zc", "<cmd>Telekasten show_calendar<CR>", desc = "Calendar" },
-    { "<leader>zb", "<cmd>Telekasten show_backlinks<CR>", desc = "Backlinks" },
-    { "<leader>zt", "<cmd>Telekasten toggle_todo<CR>", desc = "Toggle TODO" },
+    { "<leader>tzn", "<cmd>Telekasten new_note<CR>", desc = "New Note" },
+    { "<leader>tzz", "<cmd>Telekasten panel<CR>", desc = "Telekasten Panel" },
+    { "<leader>tzf", "<cmd>Telekasten find_notes<CR>", desc = "Find Notes" },
+    { "<leader>tzg", "<cmd>Telekasten search_notes<CR>", desc = "Search Notes (Grep)" },
+    { "<leader>tzd", "<cmd>Telekasten goto_today<CR>", desc = "Today’s Note" },
+    { "<leader>tzc", "<cmd>Telekasten show_calendar<CR>", desc = "Calendar" },
+    { "<leader>tzb", "<cmd>Telekasten show_backlinks<CR>", desc = "Backlinks" },
+    { "<leader>tzt", "<cmd>Telekasten toggle_todo<CR>", desc = "Toggle TODO" },
  -- use function mappings so lazy.nvim loads telekasten first
     -- 🔄 Switch vaults
     { "<leader>vs", "<cmd>Telekasten switch_vault<CR>", desc = "Switch Vault (picker)" },

@@ -15,6 +15,7 @@ local modules = {
   "keybinds.groups.live_server",
   "keybinds.groups.telekasten",
   "keybinds.groups.tasks",
+  "keybinds.groups.yank",
   "keybinds.groups.rapid_api",
 }
 

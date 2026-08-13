@@ -8,7 +8,7 @@ The descriptions reflect the current configuration, including the main keybindin
 | Plugin | What it does | Main entry points |
 | --- | --- | --- |
 | [Telescope](https://github.com/nvim-telescope/telescope.nvim) | Fuzzy finder for files, text, buffers, help, and plugin pickers. | `<leader>ff` files, `<leader>fg` grep, `<leader>fb` buffers, `<leader>fh` help |
-| [Yazi](https://github.com/mikavilpas/yazi.nvim) | Opens the Yazi terminal file manager. | `<leader>yy` |
+| [Yazi](https://github.com/mikavilpas/yazi.nvim) | Opens the Yazi terminal file manager. | `<leader>Y` |
 | [Harpoon](https://github.com/ThePrimeagen/harpoon) | Keeps a small list of important files for quick navigation. | `<leader>H` group; `Ha` add, `Hd` remove, `Hm` menu, `Hp`/`Hn` previous/next |
 | [Flash](https://github.com/folke/flash.nvim) | Fast jump and Treesitter-aware motion. | `s`, `S`, operator-pending `r`/`R` |
 | [Aerial](https://github.com/stevearc/aerial.nvim) | Symbol outline for the current file. | `<leader>o` |
@@ -36,7 +36,7 @@ The descriptions reflect the current configuration, including the main keybindin
 
 | Plugin | What it does | Main entry points |
 | --- | --- | --- |
-| [Telekasten](https://github.com/renerocksai/telekasten.nvim) | Note-taking and vault navigation for Markdown notes. | `<leader>z` group; `zn` new note, `zz` panel, `zf` find, `zg` grep, `zd` today, `zc` calendar, `zb` backlinks, `zt` TODO |
+| [Telekasten](https://github.com/renerocksai/telekasten.nvim) | Note-taking and vault navigation for Markdown notes. | `<leader>tz` Notes group; `tzn` new note, `tzz` panel, `tzf` find, `tzg` grep, `tzd` today, `tzc` calendar, `tzb` backlinks, `tzt` TODO |
 | [Markview](https://github.com/OXY2DEV/markview.nvim) | Renders Markdown in a styled in-editor view. | Markview commands and configured file behavior |
 | [Markdown Preview](https://github.com/selimacerbas/markdown-preview.nvim) | Provides a browser preview for Markdown. | Plugin commands |
 | [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) | Renders Markdown headings, bullets, code blocks, and other structures inside Neovim. | Automatic Markdown rendering |
@@ -76,4 +76,4 @@ The descriptions reflect the current configuration, including the main keybindin
 - Files ending in `.bak` are backups, not active plugin specs: `nvim-cmp.lua.bak` and `themery.bak`.
 - `astrocore.lua`, `astrolsp.lua`, and `astroui.lua` are configuration modules rather than standalone third-party plugins.
 - `nvim-nio` is a support dependency used by other Neovim plugins.
-- The `<leader>z` title is registered in `lua/keybinds/groups/telekasten.lua`, while Telekasten’s actual lazy-loaded mappings remain in `lua/plugins/telekasten.lua`.
+- The `<leader>tz` Notes title is registered in `lua/keybinds/groups/tasks.lua`, while Telekasten’s actual lazy-loaded mappings remain in `lua/plugins/telekasten.lua`.

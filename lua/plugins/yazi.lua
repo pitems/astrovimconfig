@@ -1,7 +1,7 @@
 return {
   "mikavilpas/yazi.nvim",
-  enabled = false,
+  enabled = true,
   keys = {
-    { "<leader>yy", "<cmd>Yazi<cr>", desc = "Open Yazi file manager" },
+    { "<leader>Y", "<cmd>Yazi<cr>", desc = "Open Yazi file manager" },
   },
 }
