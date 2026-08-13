@@ -28,4 +28,21 @@ local wk = require("which-key")
 
 wk.add({
 })
-return {} -- Return an empty table if needed (optional)
+
+return {
+  "AstroNvim/astrocore",
+  opts = function(_, opts)
+    opts._map_sections = opts._map_sections or {}
+    opts._map_sections.t = { desc = "Tasks & Notes" }
+
+    opts.mappings = opts.mappings or {}
+    opts.mappings.n = opts.mappings.n or {}
+    opts.mappings.n["<Leader>t"] = opts._map_sections.t
+
+    -- Keep terminal access through <C-\>, <F7>, and ToggleTerm commands,
+    -- but remove AstroNvim's terminal submenu from the task menu.
+    for _, suffix in ipairs { "f", "h", "v", "l", "n", "u", "t", "p" } do
+      opts.mappings.n["<Leader>t" .. suffix] = nil
+    end
+  end,
+}
