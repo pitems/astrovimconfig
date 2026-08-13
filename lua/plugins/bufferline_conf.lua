@@ -19,6 +19,7 @@ return {
     require("bufferline").setup(opts)
 
     local luna_bg = "#060606"
+    local bufferline_gray = "#404040"
     pcall(function() luna_bg = require("luna.palette").bg end)
 
     local function blend_selected_buffers()
@@ -46,10 +47,8 @@ return {
     end
 
     local function blend_bufferline_fill()
-      local separator = vim.api.nvim_get_hl(0, { name = "BufferLineSeparator", link = false })
-      if separator.fg then
-        vim.api.nvim_set_hl(0, "BufferLineFill", { bg = separator.fg })
-      end
+      vim.api.nvim_set_hl(0, "BufferLineFill", { bg = bufferline_gray })
+      vim.api.nvim_set_hl(0, "TabLineFill", { bg = bufferline_gray })
     end
 
     blend_selected_buffers()
