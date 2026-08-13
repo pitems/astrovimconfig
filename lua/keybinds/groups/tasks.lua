@@ -6,6 +6,7 @@ return {
     n = { "<cmd>DooingDue<CR>", "Show Due Todos" },
     b = { "<cmd>Bloocky<CR>", "Open Timeblocking Calendar" },
     B = { "<cmd>BloockySidebar<CR>", "Open Calendar Sidebar" },
+    e = { name = "Testing" },
     z = { name = "Notes" },
   },
 }
